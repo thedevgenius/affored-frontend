@@ -12,14 +12,15 @@ export default function Login() {
     const [otp, setOtp] = useState('');
     const [step, setStep] = useState('send');
     const router = useRouter();
+    const apiUrl = process.env.NEXT_PUBLIC_API_URL;
 
     const sendOTP = async () => {
-        await axios.post('http://127.0.0.1:8000/send-otp/', { phone });
+        await axios.post(apiUrl+'/send-otp/', { phone });
         setStep('verify');
     };
 
     const verifyOTP = async () => {
-        const res = await axios.post('http://127.0.0.1:8000/verify-otp/', { phone, otp });
+        const res = await axios.post(apiUrl+'/verify-otp/', { phone, otp });
 
         Cookies.set('access', res.data.access);
         Cookies.set('refresh', res.data.refresh);
