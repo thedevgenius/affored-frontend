@@ -18,7 +18,7 @@ export async function getAuthenticatedUser() {
             },
         });
         
-        redirect('/dashboard');
+        // redirect('/dashboard');
         return res.data;
         
     } catch (err) {

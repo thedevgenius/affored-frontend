@@ -1,15 +1,18 @@
-import { Geist, Geist_Mono } from "next/font/google";
+import { DM_Sans, Open_Sans } from "next/font/google";
 import "./globals.css";
-import Head from "next/head";
 
-const geistSans = Geist({
-    variable: "--font-geist-sans",
-    subsets: ["latin"],
+export const dmSans = DM_Sans({
+    subsets: ['latin'],
+    weight: ['400', '500', '700'], // adjust as needed
+    variable: '--font-dm-sans',
+    display: 'swap',
 });
 
-const geistMono = Geist_Mono({
-    variable: "--font-geist-mono",
-    subsets: ["latin"],
+export const openSans = Open_Sans({
+    subsets: ['latin'],
+    weight: ['300', '400', '600'],
+    variable: '--font-open-sans',
+    display: 'swap',
 });
 
 export const metadata = {
@@ -21,12 +24,8 @@ export const metadata = {
 export default function RootLayout({ children }) {
     return (
         <html lang="en">
-            <Head>
-                <link rel="manifest" href="/manifest.json" />
-                <meta name="theme-color" content="#000000" />
-            </Head>
             <body
-                className={`${geistSans.variable} ${geistMono.variable} antialiased`}
+                className={`${dmSans.variable} ${openSans.variable} antialiased`}
             >
                 {children}
             </body>
