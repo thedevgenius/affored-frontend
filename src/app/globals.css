@@ -5,6 +5,8 @@
     --foreground: #171717;
     --font-primary: var(--font-dm-sans);
     --font-secondary: var(--font-open-sans);
+    --primary: #43A047;
+    -secondary: #1E88E5;
 }
 
 @theme inline {
@@ -24,7 +26,7 @@
 body {
     background: var(--background);
     color: var(--foreground);
-    font-family: var(--font-open-sans);
+    font-family: var(--font-ubuntu);
 }
 
 
@@ -42,4 +44,9 @@ body {
     display: flex;
     justify-content: space-between;
     align-items: center;
+}
+.header{
+    /* background-image: linear-gradient(to bottom, rgba(67, 160, 71, 0.9), rgba(67, 160, 71, 0)); */
+    height: 250px;
+    border-bottom: 1px solid #ddd;
 }
