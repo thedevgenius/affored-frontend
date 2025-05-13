@@ -1,4 +1,5 @@
 import { DM_Sans, Open_Sans, Ubuntu } from "next/font/google";
+import Login from "@/components/shared/Login";
 import "./globals.css";
 
 export const dmSans = DM_Sans({
@@ -35,6 +36,7 @@ export default function RootLayout({ children }) {
                 className={`${ubuntu.variable} antialiased`}
             >
                 {children}
+                <Login />
             </body>
         </html>
     );
