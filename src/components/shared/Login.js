@@ -31,7 +31,7 @@ export default function Login() {
                 <div className="px-5 pt-10 login-form">
                     {step === 'send' && (
                         <>
-                            <input type="text" value={phone} onChange={(e) => setPhone(e.target.value)} className="border border-gray-400 outline-0 w-full h-10" />
+                            <input type="text" value={phone} onChange={(e) => setPhone(e.target.value)} className="input" />
                             <button type="submit" onClick={sendOTP} className="bg-blue-500 w-full h-10 text-white mt-4">Send OTP</button>
                         </>
                     )}
