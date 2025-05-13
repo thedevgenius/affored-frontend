@@ -6,7 +6,7 @@
     --font-primary: var(--font-dm-sans);
     --font-secondary: var(--font-open-sans);
     --primary: #43A047;
-    -secondary: #1E88E5;
+    --secondary: #1E88E5;
 }
 
 @theme inline {
