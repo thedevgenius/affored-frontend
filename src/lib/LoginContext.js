@@ -10,8 +10,7 @@ export function LoginProvider({ children }) {
     useEffect(() => {
         const timer = setTimeout(() => {
             setOpenLogin(true);
-        }, 2000); // 2 minutes
-
+        }, 5000);
         return () => clearTimeout(timer);
     }, []);
 

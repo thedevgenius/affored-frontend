@@ -15,7 +15,7 @@ export default function Login() {
     const apiUrl = process.env.NEXT_PUBLIC_API_URL;
     const { openLogin, setOpenLogin } = useLogin();
 
-    const handleClose = () => { 
+    const handleClose = () => {
         setOpenLogin(false);
     }
 
@@ -33,7 +33,7 @@ export default function Login() {
     };
     return (
         <>
-            <div className={`login-backdrop pt-14 px-4 ${openLogin && 'open'}`}>
+            <div className={`login-backdrop pt-14 px-2 ${openLogin && 'open'}`}>
                 {step === 'send' && (
                     <div>
                         <button className='back-btn' onClick={handleClose}>X</button>
@@ -44,15 +44,16 @@ export default function Login() {
                             <div className='mt-4'>
                                 <input
                                     type="tel"
-                                    placeholder="Phone Number"
+                                    placeholder="Enter Phone Number"
                                     value={phone}
                                     onChange={(e) => setPhone(e.target.value)}
                                     className='input mb-6'
                                 />
                                 <button onClick={sendOTP} className='btn w-full'>Login with OTP</button>
                             </div>
+                            <p className='text-center text-gray-500 font-light text-sm mt-5'>By clicking I am agree to <a href="#" className='text-green-400'>Terms & Conditions</a></p>
                         </div>
-                        <p></p>
+                        
                     </div>
                 )}
             </div>

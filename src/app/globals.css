@@ -76,11 +76,6 @@ body {
     justify-content: space-between;
     align-items: center;
 }
-.header{
-    /* background-image: linear-gradient(to bottom, rgba(67, 160, 71, 0.9), rgba(67, 160, 71, 0)); */
-    height: 250px;
-    border-bottom: 1px solid #ddd;
-}
 
 .login-backdrop{
     background-color: #fff;
