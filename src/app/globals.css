@@ -28,6 +28,37 @@ body {
     color: var(--foreground);
     font-family: var(--font-ubuntu);
 }
+.btn{
+    display: inline-block;
+    padding: 12px 25px;
+    border-radius: 30px;
+    background-color: var(--primary);
+    color: #fff;
+    font-weight: 300;
+}
+.input{
+    width: 100%;
+    height: 48px;
+    border: 1px solid #d8d8d8;
+    outline: none;
+    padding: 15px;
+    border-radius: 30px;
+    color: #000;
+}
+.back-btn{
+    border-radius: 50%;
+    width: 45px;
+    height: 45px;
+    display: flex;
+    box-shadow: 0 0 10px #cecece;
+    position: absolute;
+    top: 20px;
+    left: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
 
 
 .footer {
@@ -52,20 +83,22 @@ body {
 }
 
 .login-backdrop{
+    background-color: #fff;
     position: fixed;
-    left: 0;
+    right: -100%;
     top: 0;
-    background-color: rgba(0, 0, 0, 0.5);
     width: 100%;
     height: 100%;
+    transition: all .2s ease;
+}
+.login-backdrop.open{
+    right: 0;
 }
 .login-form{
-    background-color: #fff;
     position: absolute;
-    bottom: 0;
+    left: 0;
+    bottom: 10px;
     width: 100%;
-    height: calc(100% - 200px);
-    border-radius: 30px 30px 0 0;
-
-
+    z-index: 2;
+    padding: 30px 20px;
 }

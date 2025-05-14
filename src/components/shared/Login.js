@@ -1,9 +1,10 @@
 'use client';
-
+import Image from 'next/image';
 import { useState } from 'react';
 import axios from 'axios';
 import Cookies from 'js-cookie';
 import { useRouter } from 'next/navigation';
+import { useLogin } from '@/lib/LoginContext';
 
 
 export default function Login() {
@@ -12,14 +13,19 @@ export default function Login() {
     const [step, setStep] = useState('send');
     const router = useRouter();
     const apiUrl = process.env.NEXT_PUBLIC_API_URL;
+    const { openLogin, setOpenLogin } = useLogin();
+
+    const handleClose = () => { 
+        setOpenLogin(false);
+    }
 
     const sendOTP = async () => {
-        await axios.post(apiUrl+'/send-otp/', { phone });
+        await axios.post(apiUrl + '/send-otp/', { phone });
         setStep('verify');
     };
 
     const verifyOTP = async () => {
-        const res = await axios.post(apiUrl+'/verify-otp/', { phone, otp });
+        const res = await axios.post(apiUrl + '/verify-otp/', { phone, otp });
 
         Cookies.set('access', res.data.access);
         Cookies.set('refresh', res.data.refresh);
@@ -27,24 +33,29 @@ export default function Login() {
     };
     return (
         <>
-            <div className='login-backdrop'>
-                <div className="px-5 pt-10 login-form">
-                    {step === 'send' && (
-                        <>
-                            <input type="text" value={phone} onChange={(e) => setPhone(e.target.value)} className="input" />
-                            <button type="submit" onClick={sendOTP} className="bg-blue-500 w-full h-10 text-white mt-4">Send OTP</button>
-                        </>
-                    )}
-
-                    {step === 'verify' && (
-                        <>
-                            <input type="text" value={otp} onChange={(e) => setOtp(e.target.value)} className="border border-gray-400 outline-0 w-full h-10"  placeholder='OTP'/>
-                            <button type="submit" onClick={verifyOTP} className="bg-blue-500 w-full h-10 text-white mt-4">Verify OTP</button>
-                        </>
-                    )}
-                    
-                </div>
+            <div className={`login-backdrop pt-14 px-4 ${openLogin && 'open'}`}>
+                {step === 'send' && (
+                    <div>
+                        <button className='back-btn' onClick={handleClose}>X</button>
+                        <img src="/images/login-img.jpg" alt="Login Image" />
+                        <div className='login-form'>
+                            <h1 className='text-2xl font-bold text-center'>Login</h1>
+                            <p className='text-center text-sm'>Please enter your phone number to receive an OTP.</p>
+                            <div className='mt-4'>
+                                <input
+                                    type="tel"
+                                    placeholder="Phone Number"
+                                    value={phone}
+                                    onChange={(e) => setPhone(e.target.value)}
+                                    className='input mb-6'
+                                />
+                                <button onClick={sendOTP} className='btn w-full'>Login with OTP</button>
+                            </div>
+                        </div>
+                        <p></p>
+                    </div>
+                )}
             </div>
         </>
-  );
+    );
 }
