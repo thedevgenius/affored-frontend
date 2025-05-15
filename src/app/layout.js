@@ -1,6 +1,7 @@
 import { DM_Sans, Open_Sans, Ubuntu } from "next/font/google";
 import Login from "@/components/shared/Login";
 import { LoginProvider } from "@/lib/LoginContext";
+import { Toaster } from "react-hot-toast";
 import "./globals.css";
 
 export const dmSans = DM_Sans({
@@ -36,7 +37,9 @@ export default function RootLayout({ children }) {
             <body
                 className={`${ubuntu.variable} antialiased`}
             >
-                <LoginProvider>{children}</LoginProvider>
+                <LoginProvider>
+                    <Toaster position="bottom-center" />
+                    {children}</LoginProvider>
                 
             </body>
         </html>
