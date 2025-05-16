@@ -1,139 +1,147 @@
 'use client';
-import Image from 'next/image';
-import { useState } from 'react';
+
+import "./login.css";
 import axios from 'axios';
-import Cookies from 'js-cookie';
+import { z } from "zod";
+import { useState } from "react";
+import { toast } from "react-hot-toast";
 import { useRouter } from 'next/navigation';
-import { useLogin } from '@/lib/LoginContext';
-import { toast } from 'react-hot-toast';
-
-import { set, useForm } from 'react-hook-form';
-import { zodResolver } from '@hookform/resolvers/zod';
-import { z } from 'zod';
-
-const phoneSchema = z.object({
-    phoneNumber: z.string()
-        .min(10, { message: "Phone number must be at least 10 digits" })
-        .max(15, { message: "Phone number must be at most 15 digits" })
-        .regex(/^[0-9+]+$/, { message: "Only numbers and + allowed" })
-});
+import { useLogin } from "@/lib/LoginContext";
+import { set, useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
 
 
-export default function Login() {
-    const { openLogin, setOpenLogin } = useLogin();
+
+const Login = () => {
     const apiUrl = process.env.NEXT_PUBLIC_API_URL;
     const router = useRouter();
-
-    const [otp, setOtp] = useState('');
     const [step, setStep] = useState('send');
-    const [btn, setBtn] = useState(false);
-    
     const [submittedData, setSubmittedData] = useState(null);
+    const { openLogin, setOpenLogin } = useLogin();
+
+    const phoneSchema = z.object({
+        phone: z.string().regex(/^\d{10}$/, "Phone number must be 10 digits"),
+    });
+
+    const otpSchema = z.object({
+        phone: z.string().regex(/^\d{10}$/, "Phone number must be 10 digits"),
+        otp: z.string().regex(/^\d{4}$/, "OTP must be 4 digits"),
+    });
+
     const {
         register,
         handleSubmit,
-        formState: { errors },
         watch,
-        setValue
+        setValue,
+        formState: { errors },
     } = useForm({
-        resolver: zodResolver(phoneSchema)
+        resolver: zodResolver(step === 'send' ? phoneSchema : otpSchema),
     });
 
-    const phoneNumber = watch('phoneNumber');
+    const phone = watch("phone", "");
+    const otp = watch("otp", "");
 
     const handlePhoneChange = (e) => {
         let value = e.target.value.replace(/\D/g, '');
         if (value.length > 10) {
             value = value.slice(0, 10);
-        } else {
-            setBtn(false);
         }
-        setValue('phoneNumber', value);
+        setValue('phone', value);
     };
+
+    const handleOtpChange = (e) => { 
+        let value = e.target.value.replace(/\D/g, '');
+        if (value.length > 4) {
+            value = value.slice(0, 4);
+        }
+        setValue('otp', value);
+    }
 
     const onSubmit = (data) => {
         setSubmittedData(data);
-        console.log('Valid data:', data);
-        // Here you would typically send the data to your backend
-        axios.post(apiUrl + '/send-otp/', { phone: data.phoneNumber })
-            .then((response) => {
-                console.log('OTP sent successfully:', response.data);
-                setStep('verify');
-                toast.success('You did it!'); 
+        if (step === 'send') { 
+            axios.post(apiUrl + '/send-otp/', { phone: data.phone })
+                .then((response) => {
+                    if (response.status === 200) {
+                        toast.success('OTP send successfully');
+                        setStep('verify');
+                    }
             })
             .catch((error) => {
-                console.error('Error sending OTP:', error);
-
+                if (error.response && error.response.status === 429) {
+                    toast.error('Too many requests. Please try again later.');
+                } else {
+                    console.error('Error sending OTP:', error);
+                }
             });
-        setStep('verify');
-    };
-
-    const handleClose = () => {
-        setOpenLogin(false);
+        }
+        
+        
+        if (step === 'verify') {
+            console.log(data)
+            axios.post(apiUrl + '/verify-otp/', { phone: data.phone, otp: data.otp })
+                .then((response) => {
+                    if (response.status === 200) {
+                        toast.success('OTP verified successfully');
+                        setOpenLogin(false);
+                        router.push('/')
+                        setStep('send');
+                    } else {
+                        toast.error('Invalid OTP. Please try again.');
+                    }
+                })
+                .catch((error) => {
+                    if (error.response && error.response.status === 400) {
+                        toast.error('Invalid OTP. Please try again.');
+                    } else {
+                        console.error('Error verifying OTP:', error);
+                    }
+                });
+        }
     }
 
-    const sendOTP = async () => {
-        await axios.post(apiUrl + '/send-otp/', { phone });
-        setStep('verify');
-    };
+    const onError = (errors) => {
+        const firstErrorKey = Object.keys(errors)[0];
+        const firstErrorMessage = errors[firstErrorKey]?.message || "Validation error";
+        toast.error(firstErrorMessage);
+    }
 
-    const verifyOTP = async () => {
-        const res = await axios.post(apiUrl + '/verify-otp/', { phone, otp });
 
-        Cookies.set('access', res.data.access);
-        Cookies.set('refresh', res.data.refresh);
-        router.push('/');
-    };
     return (
-        <>
-            <div className={`login-backdrop pt-14 px-2 ${openLogin && 'open'}`}>
-                <form onSubmit={handleSubmit(onSubmit)}>
-                    {step === 'send' && (
-                        <div>
-                            <button className='back-btn' type='button' onClick={handleClose}>X</button>
-                            <img src="/images/login-img.jpg" alt="Login Image" />
-                            <div className='login-form'>
-                                <h1 className='text-3xl font-bold text-center'>Login</h1>
-                                <p className='text-center text-base'>Discover. Decide. Direct</p>
-                                <div className='mt-4'>
-                                    <input
-                                        id="phoneNumber"
-                                        type="tel"
-                                        className={`input ${errors.phoneNumber ? 'input-error' : ''}`}
-                                        placeholder="Enter your phone number"
-                                        {...register('phoneNumber')}
-                                        onChange={handlePhoneChange}
-                                        onBlur={() => {
-                                            if (errors.phoneNumber) {
-                                                toast.error(errors.phoneNumber.message, {
-                                                id: 'phone-error'
-                                                });
-                                            }
-                                            }}
-                                    />
-                                    
-                                    
-                                    <button type='submit' className='btn w-full mt-4'>Login with OTP</button>
-                                </div>
-                                <p className='text-center text-gray-500 font-light text-sm mt-5'>By clicking I am agree to <a href="#" className='text-green-400'>Terms & Conditions</a></p>
-                            </div>
-
+        <div className={`login_container ${openLogin ? 'active' : ''}`}>
+            {step == 'send' && (
+                <div className="login_form">
+                    <h1 className="text-center text-3xl font-medium mb-5">Login</h1>
+                    <form onSubmit={handleSubmit(onSubmit, onError)}>
+                        <div className="relative mb-4">
+                            <span className="country_code">+91</span>
+                            <input type="tel" className="input pl-12" placeholder="Enter Your Phone Number"
+                                {...register("phone")}
+                                onChange={handlePhoneChange}
+                            />
                         </div>
-                    )}
-                    {step === 'verify' && (
-                        <div>
-                            <div className='login-form'>
-                                <h1 className='text-3xl font-bold text-center'>Verify OTP</h1>
-                                <div className='mt-4'>
-                                    <input type="text" placeholder='Verify OTP' />
-                                    <button type='submit' className='btn w-full mt-4'>Verify OTP</button>
-                                </div>
-                                <p className='text-center text-gray-500 font-light text-sm mt-5'>By clicking I am agree to <a href="#" className='text-green-400'>Terms & Conditions</a></p>
-                            </div>
-                        </div>
-                    )}
-                </form>
-            </div>
-        </>
-    );
+                        <button type="submit" className="btn w-full" disabled={phone.length !== 10}>Continue</button>
+    
+                        
+                    </form>
+                </div>
+            )}
+            
+            {step == 'verify' && (
+                <div className="login_form">
+                    <h1 className="text-center text-3xl font-medium mb-5">Verify OTP</h1>
+                    <form onSubmit={handleSubmit(onSubmit, onError)}>
+                        <input type="text" className="input"
+                            placeholder="Enter OTP"
+                            {...register("otp")}
+                            onChange={handleOtpChange}
+                        />
+                        <button type="submit" className="btn w-full">Verify OTP</button>
+                    </form>
+                </div>
+            )}
+        </div>
+    )
 }
+
+export default Login;

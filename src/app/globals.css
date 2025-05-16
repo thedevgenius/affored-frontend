@@ -28,24 +28,34 @@ body {
     color: var(--foreground);
     font-family: var(--font-ubuntu);
 }
-.btn{
+
+.btn {
     display: inline-block;
     padding: 12px 25px;
     border-radius: 30px;
     background-color: var(--primary);
     color: #fff;
-    font-weight: 300;
 }
-.input{
+
+.btn:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+.input {
     width: 100%;
     height: 48px;
     border: 1px solid #d8d8d8;
     outline: none;
-    padding: 15px;
     border-radius: 30px;
     color: #000;
 }
-.back-btn{
+
+.input-error {
+    border: 1px solid red;
+}
+
+.back-btn {
     border-radius: 50%;
     width: 45px;
     height: 45px;
@@ -75,25 +85,4 @@ body {
     display: flex;
     justify-content: space-between;
     align-items: center;
-}
-
-.login-backdrop{
-    background-color: #fff;
-    position: fixed;
-    right: -100%;
-    top: 0;
-    width: 100%;
-    height: 100%;
-    transition: all .2s ease;
-}
-.login-backdrop.open{
-    right: 0;
-}
-.login-form{
-    position: absolute;
-    left: 0;
-    bottom: 10px;
-    width: 100%;
-    z-index: 2;
-    padding: 30px 20px;
 }
