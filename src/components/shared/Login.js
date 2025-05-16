@@ -45,7 +45,8 @@ export default function Login() {
         let value = e.target.value.replace(/\D/g, '');
         if (value.length > 10) {
             value = value.slice(0, 10);
-            setBtn(true);
+        } else {
+            setBtn(false);
         }
         setValue('phoneNumber', value);
     };
@@ -102,11 +103,17 @@ export default function Login() {
                                         placeholder="Enter your phone number"
                                         {...register('phoneNumber')}
                                         onChange={handlePhoneChange}
+                                        onBlur={() => {
+                                            if (errors.phoneNumber) {
+                                                toast.error(errors.phoneNumber.message, {
+                                                id: 'phone-error'
+                                                });
+                                            }
+                                            }}
                                     />
-                                    {errors.phoneNumber && (
-                                        <p className="mt-1 text-sm text-red-600 font-light">{errors.phoneNumber.message}</p>
-                                    )}
-                                    <button type='submit' className='btn w-full mt-4' disabled={btn}>Login with OTP</button>
+                                    
+                                    
+                                    <button type='submit' className='btn w-full mt-4'>Login with OTP</button>
                                 </div>
                                 <p className='text-center text-gray-500 font-light text-sm mt-5'>By clicking I am agree to <a href="#" className='text-green-400'>Terms & Conditions</a></p>
                             </div>
