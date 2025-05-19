@@ -19,6 +19,14 @@ const Login = () => {
     const [submittedData, setSubmittedData] = useState(null);
     const { openLogin, setOpenLogin } = useLogin();
 
+    const handleLoginClose = () => {
+        setOpenLogin(false);
+    }
+
+    const handleVerifyClose = () => {
+        setStep('send');
+    }
+
     const phoneSchema = z.object({
         phone: z.string().regex(/^\d{10}$/, "Phone number must be 10 digits"),
     });
@@ -108,36 +116,40 @@ const Login = () => {
 
 
     return (
-        <div className={`login_container ${openLogin ? 'active' : ''}`}>
+        <div >
             {step == 'send' && (
-                <div className="login_form">
-                    <h1 className="text-center text-3xl font-medium mb-5">Login</h1>
-                    <form onSubmit={handleSubmit(onSubmit, onError)}>
-                        <div className="relative mb-4">
-                            <span className="country_code">+91</span>
-                            <input type="tel" className="input pl-12" placeholder="Enter Your Phone Number"
-                                {...register("phone")}
-                                onChange={handlePhoneChange}
-                            />
-                        </div>
-                        <button type="submit" className="btn w-full" disabled={phone.length !== 10}>Continue</button>
-    
-                        
-                    </form>
+                <div className={`login_container ${openLogin ? 'active' : ''}`}>
+                    <button className="back-btn" onClick={handleLoginClose}>X</button>
+                    <div className="login_form">
+                        <h1 className="text-center text-3xl font-medium mb-5">Login</h1>
+                        <form onSubmit={handleSubmit(onSubmit, onError)}>
+                            <div className="relative mb-4">
+                                <span className="country_code">+91</span>
+                                <input type="tel" className="input pl-12" placeholder="Enter Your Phone Number"
+                                    {...register("phone")}
+                                    onChange={handlePhoneChange}
+                                />
+                            </div>
+                            <button type="submit" className="btn w-full" disabled={phone.length !== 10}>Continue</button>
+                        </form>
+                    </div>
                 </div>
             )}
             
             {step == 'verify' && (
-                <div className="login_form">
-                    <h1 className="text-center text-3xl font-medium mb-5">Verify OTP</h1>
-                    <form onSubmit={handleSubmit(onSubmit, onError)}>
-                        <input type="text" className="input"
-                            placeholder="Enter OTP"
-                            {...register("otp")}
-                            onChange={handleOtpChange}
-                        />
-                        <button type="submit" className="btn w-full">Verify OTP</button>
-                    </form>
+                <div className={`login_container ${openLogin ? 'active' : ''}`}>
+                    <button className="back-btn" onClick={handleVerifyClose}>X</button>
+                    <div className="login_form">
+                        <h1 className="text-center text-3xl font-medium mb-5">Verify OTP</h1>
+                        <form onSubmit={handleSubmit(onSubmit, onError)}>
+                            <input type="text" className="input"
+                                placeholder="Enter OTP"
+                                {...register("otp")}
+                                onChange={handleOtpChange}
+                            />
+                            <button type="submit" className="btn w-full">Verify OTP</button>
+                        </form>
+                    </div>
                 </div>
             )}
         </div>
