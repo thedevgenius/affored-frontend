@@ -12,11 +12,14 @@
     "@hookform/resolvers": "^5.0.1",
     "axios": "^1.9.0",
     "js-cookie": "^3.0.5",
+    "js-cookies": "^1.0.4",
     "next": "15.3.1",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
     "react-hook-form": "^7.56.3",
     "react-hot-toast": "^2.5.2",
+    "swr": "^2.3.3",
+    "wretch": "^2.11.0",
     "zod": "^3.24.4"
   },
   "devDependencies": {

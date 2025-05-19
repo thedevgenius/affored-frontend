@@ -9,6 +9,8 @@ import { useRouter } from 'next/navigation';
 import { useLogin } from "@/lib/LoginContext";
 import { set, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
+import Cookies from "js-cookie";
+
 
 
 
@@ -87,12 +89,12 @@ const Login = () => {
         
         if (step === 'verify') {
             console.log(data)
-            axios.post(apiUrl + '/verify-otp/', { phone: data.phone, otp: data.otp })
+            axios.post(apiUrl + '/verify-otp/', { phone: data.phone, otp: data.otp }, { withCredentials: true })
                 .then((response) => {
                     if (response.status === 200) {
                         toast.success('OTP verified successfully');
-                        setOpenLogin(false);
                         router.push('/')
+                        setOpenLogin(false);
                         setStep('send');
                     } else {
                         toast.error('Invalid OTP. Please try again.');

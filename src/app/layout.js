@@ -39,8 +39,9 @@ export default function RootLayout({ children }) {
             >
                 <LoginProvider>
                     <Toaster position="bottom-center" />
-                    {children}</LoginProvider>
-                
+                    {children}
+                </LoginProvider>
+
             </body>
         </html>
     );

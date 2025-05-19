@@ -1,27 +1,16 @@
-'use server';
+'use client';
 
 import axios from 'axios';
-import { cookies } from 'next/headers';
-import { redirect } from 'next/navigation';
 
-export async function getAuthenticatedUser() {
-    const cookieStore = await cookies();
-    const token = cookieStore.get('access')?.value;
-
-    if (!token) 
-    redirect('/login');
-
-    try {
-        const res = await axios.get('http://127.0.0.1:8000/get-user-data/', {
-            headers: {
-                Authorization: `Bearer ${token}`,
-            },
+export async function IsAuthenticated() {
+    axios.get('http://localhost:8000/get-user-data/', {
+        withCredentials: true, // ✅ Required to send cookies (access_token)
+    })
+        .then((response) => {
+            if (response.status === 200) {
+                return true;
+            } else {
+                return false;
+            }
         });
-        
-        // redirect('/dashboard');
-        return res.data;
-        
-    } catch (err) {
-        redirect('/login');
-    }
 }
