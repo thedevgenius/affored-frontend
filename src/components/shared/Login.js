@@ -144,7 +144,7 @@ const Login = () => {
                     <div className="login_form">
                         <h1 className="text-center text-3xl font-medium mb-5">Verify OTP</h1>
                         <form onSubmit={handleSubmit(onSubmit, onError)}>
-                            <input type="text" className="input"
+                            <input type="text" className="input p-4 mb-3"
                                 placeholder="Enter OTP"
                                 {...register("otp")}
                                 onChange={handleOtpChange}

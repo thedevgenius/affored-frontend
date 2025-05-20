@@ -1,4 +1,3 @@
-// utils/axios.js
 import axios from 'axios';
 
 const api = axios.create({
@@ -14,7 +13,8 @@ api.interceptors.response.use(
         if (err.response?.status === 401 && !originalRequest._retry) {
             originalRequest._retry = true;
             try {
-                await axios.post("http://localhost:8000/refresh/", {}, {
+                await axios.post("http://localhost:8000/refresh/",
+                    {}, {
                     withCredentials: true,
                 });
 
