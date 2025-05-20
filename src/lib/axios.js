@@ -1,3 +1,4 @@
+// utils/axios.js
 import axios from 'axios';
 
 const api = axios.create({
@@ -5,35 +6,26 @@ const api = axios.create({
     withCredentials: true,
 });
 
-const refreshToken = async () => {
-    try {
-        const res = await axios.post('http://localhost:8000/token/refresh/', {}, {
-            withCredentials: true
-        });
-        const access = res.data.access;
-        api.defaults.headers.common['Authorization'] = `Bearer ${access}`;
-        return access;
-    } catch (err) {
-        console.error("Token refresh failed", err);
-        throw err;
-    }
-};
-
 api.interceptors.response.use(
-    response => response,
-    async error => {
-        const originalRequest = error.config;
-        if (error.response?.status === 401 && !originalRequest._retry) {
+    res => res,
+    async err => {
+        const originalRequest = err.config;
+
+        if (err.response?.status === 401 && !originalRequest._retry) {
             originalRequest._retry = true;
             try {
-                const newAccess = await refreshToken();
-                originalRequest.headers['Authorization'] = `Bearer ${newAccess}`;
+                await axios.post("http://localhost:8000/refresh/", {}, {
+                    withCredentials: true,
+                });
+
                 return api(originalRequest);
             } catch (refreshErr) {
-                return Promise.reject(refreshErr);
+                console.error("Refresh token expired or invalid.");
+                // Optional: redirect to login
             }
         }
-        return Promise.reject(error);
+
+        return Promise.reject(err);
     }
 );
 

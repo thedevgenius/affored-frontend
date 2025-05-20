@@ -1,28 +1,24 @@
-'use client';
+// app/profile/page.jsx
+"use client";
+import { useEffect, useState } from "react";
+import api from "@/lib/axios";
 
-import { useEffect, useState } from 'react';
-import api from '@/lib/axios'; // Adjust the import based on your axios setup
-
-export default function ProfilePage() {
+export default function Profile() {
     const [user, setUser] = useState(null);
 
     useEffect(() => {
-        const fetchUser = async () => {
-            try {
-                const res = await api.get('/get-user-data/');
-                setUser(res.data);
-            } catch (err) {
-                console.error("User fetch failed", err);
-            }
-        };
+        api
+            .get("profile/")
+            .then((res) => setUser(res.data))
+            .catch((err) => console.error("Profile fetch failed:", err));
+    }, []);
 
-        fetchUser();
-    }, []);  // ✅ Only runs once
+    if (!user) return <p>Loading...</p>;
 
     return (
-        <div>
-            <h1>Profile</h1>
-            {user ? <p>Hello, {user.phone}</p> : <p>Loading...</p>}
+        <div className="p-4">
+            <h1 className="text-xl font-bold">Profile</h1>
+            <p><strong>Phone:</strong> {user.phone}</p>
         </div>
     );
 }
