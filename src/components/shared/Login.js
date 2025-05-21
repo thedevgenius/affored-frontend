@@ -9,10 +9,6 @@ import { useRouter } from 'next/navigation';
 import { useLogin } from "@/lib/LoginContext";
 import { set, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import Cookies from "js-cookie";
-
-
-
 
 const Login = () => {
     const apiUrl = process.env.NEXT_PUBLIC_API_URL;
@@ -70,7 +66,7 @@ const Login = () => {
     const onSubmit = (data) => {
         setSubmittedData(data);
         if (step === 'send') { 
-            axios.post(apiUrl + '/send-otp/', { phone: data.phone })
+            axios.post(apiUrl + 'send-otp/', { phone: data.phone })
                 .then((response) => {
                     if (response.status === 200) {
                         toast.success('OTP send successfully');
@@ -89,13 +85,13 @@ const Login = () => {
         
         if (step === 'verify') {
             console.log(data)
-            axios.post(apiUrl + '/verify-otp/', { phone: data.phone, otp: data.otp }, { withCredentials: true })
+            axios.post(apiUrl + 'verify-otp/', { phone: data.phone, otp: data.otp }, { withCredentials: true})
                 .then((response) => {
                     if (response.status === 200) {
                         toast.success('OTP verified successfully');
                         router.push('/')
                         setOpenLogin(false);
-                        setStep('send');
+                        setStep('verified');
                     } else {
                         toast.error('Invalid OTP. Please try again.');
                     }
@@ -116,12 +112,15 @@ const Login = () => {
         toast.error(firstErrorMessage);
     }
 
+    if (step === 'verified') { 
+        return;
+    }
 
     return (
-        <div >
+        <div>
             {step == 'send' && (
                 <div className={`login_container ${openLogin ? 'active' : ''}`}>
-                    <button className="back-btn" onClick={handleLoginClose}>X</button>
+                    <button className="back-btn" onClick={handleLoginClose}><img src="/icons/arrow-left.svg" alt="" /></button>
                     <div className="login_form">
                         <h1 className="text-center text-3xl font-medium mb-5">Login</h1>
                         <form onSubmit={handleSubmit(onSubmit, onError)}>
