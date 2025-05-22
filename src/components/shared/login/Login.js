@@ -15,7 +15,7 @@ const Login = () => {
     const router = useRouter();
     const [step, setStep] = useState('send');
     const [submittedData, setSubmittedData] = useState(null);
-    const { openLogin, setOpenLogin, setIsAuthenticated } = useLogin();
+    const { openLogin, setOpenLogin, setIsAuthenticated, setLoading } = useLogin();
 
     const handleLoginClose = () => {
         setOpenLogin(false);
@@ -71,6 +71,7 @@ const Login = () => {
                     if (response.status === 200) {
                         toast.success('OTP send successfully');
                         setStep('verify');
+                        console.log(response.data);
                     }
             })
             .catch((error) => {
@@ -94,6 +95,7 @@ const Login = () => {
                         setStep('verified');
                         localStorage.setItem('isAccessToken', true);
                         setIsAuthenticated(true);
+                        setLoading(false);
                     } else {
                         toast.error('Invalid OTP. Please try again.');
                     }

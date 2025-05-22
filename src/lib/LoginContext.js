@@ -46,12 +46,14 @@ export function LoginProvider({ children }) {
         if (!isAccessToken) { 
             setIsAuthenticated(false);
             openLoginHandler();
+        } else {
+            checkAuth();
         }
         
     }, []);
 
     return (
-        <LoginContext.Provider value={{ openLogin, setOpenLogin, isAuthenticated, setIsAuthenticated, user, loading }}>
+        <LoginContext.Provider value={{ openLogin, setOpenLogin, isAuthenticated, setIsAuthenticated, user, loading, setLoading }}>
             {children}
         </LoginContext.Provider>
     );

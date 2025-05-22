@@ -1,5 +1,5 @@
-import Header from "@/components/shared/Header";
-import Footer from "@/components/shared/Footer";
+import Header from "@/components/shared/header/Header";
+import Footer from "@/components/shared/footer/Footer";
 
 
 
@@ -8,7 +8,6 @@ export default function MainLayout({ children }) {
         <>
             <Header />
             {children}
-            <Footer />
         </>
   );
 }

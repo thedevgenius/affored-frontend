@@ -1,8 +1,9 @@
 import { DM_Sans, Open_Sans, Ubuntu } from "next/font/google";
-import Login from "@/components/shared/Login";
+import Login from "@/components/shared/login/Login";
 import { LoginProvider } from "@/lib/LoginContext";
 import { Toaster } from "react-hot-toast";
 import Loader from "@/components/shared/loader/Loader";
+import Footer from "@/components/shared/footer/Footer";
 
 import "./globals.css";
 
@@ -42,7 +43,7 @@ export default function RootLayout({ children }) {
                 <LoginProvider>
                     <Toaster position="bottom-center" />
                     {children}
-                    {/* <Loader /> */}
+                    <Footer />
                 </LoginProvider>
 
             </body>

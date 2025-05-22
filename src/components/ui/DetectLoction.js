@@ -1,4 +1,4 @@
-'use client'; // if using Next.js App Router
+'use client';
 
 import { useEffect, useState } from 'react';
 
@@ -52,7 +52,7 @@ export default function DetectLocation() {
             {address ? (
                 <p className='text-sm font-light cursor-pointer'>{address}</p>
             ) : (
-                <p>{error || 'Getting location...'}</p>
+                <p className='text-sm font-light cursor-pointer'>{error || 'Getting location...'}</p>
             )}
         </div>
     );

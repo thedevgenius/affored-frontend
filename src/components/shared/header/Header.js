@@ -1,4 +1,4 @@
-import DetectLocation from "../ui/DetectLoction";
+import DetectLocation from "../../ui/DetectLoction";
 
 
 const Header = () => {

@@ -2,16 +2,15 @@
 
 import Link from "next/link";
 import Image from "next/image";
-import Login from "./Login";
-import home from "../../../public/icons/home.svg";
-import search from "../../../public/icons/search.svg";
-import user from "../../../public/icons/profile.svg";
-import login from "../../../public/icons/login.svg";
+import Login from "../login/Login"
+import home from "../../../../public/icons/home.svg";
+import search from "../../../../public/icons/search.svg";
+import user from "../../../../public/icons/profile.svg";
+import login from "../../../../public/icons/login.svg";
 
 import { useLogin } from "@/lib/LoginContext";
-// import { redirect } from 'next/navigation';
 import { logout } from "@/lib/logout";
-import Loader from "./loader/Loader";
+import Loader from "../loader/Loader";
 import { useRouter } from "next/navigation";
 
 
@@ -20,11 +19,9 @@ const Footer = () => {
     const router = useRouter();
 
     const handleLoginClick = () => {
-        console.log('handleLoginClick');
         // if (loading) {
         //     return <Loader />;
         // }
-        console.log('isAuthenticated', isAuthenticated);
         if (!isAuthenticated) {
             setOpenLogin(true);
 
