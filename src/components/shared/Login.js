@@ -15,7 +15,7 @@ const Login = () => {
     const router = useRouter();
     const [step, setStep] = useState('send');
     const [submittedData, setSubmittedData] = useState(null);
-    const { openLogin, setOpenLogin } = useLogin();
+    const { openLogin, setOpenLogin, setIsAuthenticated } = useLogin();
 
     const handleLoginClose = () => {
         setOpenLogin(false);
@@ -84,14 +84,16 @@ const Login = () => {
         
         
         if (step === 'verify') {
-            console.log(data)
             axios.post(apiUrl + 'verify-otp/', { phone: data.phone, otp: data.otp }, { withCredentials: true})
                 .then((response) => {
                     if (response.status === 200) {
                         toast.success('OTP verified successfully');
+                        
                         router.push('/')
                         setOpenLogin(false);
                         setStep('verified');
+                        localStorage.setItem('isAccessToken', true);
+                        setIsAuthenticated(true);
                     } else {
                         toast.error('Invalid OTP. Please try again.');
                     }

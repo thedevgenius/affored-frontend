@@ -1,13 +1,11 @@
-// lib/logout.ts
 export async function logout() {
-    const res = await fetch('http://localhost:8000/logout/', {
+    const res = await fetch('http://localhost:8000/v1/logout/', {
         method: 'POST',
         credentials: 'include',
     });
 
     if (res.ok) {
-        window.location.href = '/'; // redirect to home or login
-    } else {
-        console.error("Logout failed");
+        window.location.href = '/';
+        localStorage.removeItem('isAccessToken');
     }
 }

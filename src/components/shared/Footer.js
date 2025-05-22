@@ -9,21 +9,28 @@ import user from "../../../public/icons/profile.svg";
 import login from "../../../public/icons/login.svg";
 
 import { useLogin } from "@/lib/LoginContext";
-import useAuth from "@/hooks/useAuth";
-import { redirect } from 'next/navigation';
+// import { redirect } from 'next/navigation';
 import { logout } from "@/lib/logout";
+import Loader from "./loader/Loader";
+import { useRouter } from "next/navigation";
 
 
 const Footer = () => {
-    const { setOpenLogin, isLogin } = useLogin();
+    const { setOpenLogin, isAuthenticated, loading } = useLogin();
+    const router = useRouter();
 
     const handleLoginClick = () => {
-        if (isLogin) {
-            redirect("/dashboard");
-        } else {
+        console.log('handleLoginClick');
+        // if (loading) {
+        //     return <Loader />;
+        // }
+        console.log('isAuthenticated', isAuthenticated);
+        if (!isAuthenticated) {
             setOpenLogin(true);
+
+        } else {
+            router.push('/dashboard');
         }
-        
     }
 
     return (
@@ -32,8 +39,8 @@ const Footer = () => {
                 <ul>
                     <li><Link href="/"><Image src={home} width={25} height={25} alt="Home Icon" /></Link></li>
                     <li><Link href="/search"><Image src={search} width={25} height={25} alt="Search Icon" /></Link></li>
-                    <li><Link href="/dashboard"><Image src={user} width={25} height={25} alt="User Icon" /></Link></li>
-                    <li><button onClick={handleLoginClick}><Image src={login} width={25} height={25} alt="Login Icon" /></button></li>
+                    <li><button onClick={handleLoginClick}><Image src={user} width={25} height={25} alt="User Icon" /></button></li>
+                    {/* <li><button onClick={handleLoginClick}><Image src={login} width={25} height={25} alt="Login Icon" /></button></li> */}
                     <li><button onClick={logout}><Image src={login} width={25} height={25} alt="Login Icon" /></button></li>
                 </ul>
             </footer>
