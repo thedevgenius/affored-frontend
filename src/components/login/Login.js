@@ -74,14 +74,14 @@ const Login = () => {
                         setStep('verify');
                         console.log(response.data);
                     }
-            })
-            .catch((error) => {
-                if (error.response && error.response.status === 429) {
-                    toast.error('Too many requests. Please try again later.');
-                } else {
-                    console.error('Error sending OTP:', error);
-                }
-            });
+                })
+                .catch((error) => {
+                    if (error.response && error.response.status === 429) {
+                        toast.error('Too many requests. Please try again later.');
+                    } else {
+                        console.error('Error sending OTP:', error);
+                    }
+                });
         }
         
         
@@ -129,7 +129,7 @@ const Login = () => {
         <div>
             {step == 'send' && (
                 <div className={`login_container ${openLogin ? 'active' : ''}`}>
-                    <button className="back-btn" onClick={handleLoginClose}><img src="/icons/arrow-left.svg" alt="" /></button>
+                    <button className="back-btn" onClick={handleLoginClose}>X</button>
                     <div className="login_form">
                         <h1 className="text-center text-3xl font-medium mb-5">Login</h1>
                         <form onSubmit={handleSubmit(onSubmit, onError)}>
