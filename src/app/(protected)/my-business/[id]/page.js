@@ -1,26 +1,27 @@
 'use client';
 
 import axios from "axios";
-import { useEffect, useState } from "react";
+import { use, useEffect, useState } from "react";
 import { redirect } from 'next/navigation';
 import { useAuth } from "@/lib/AuthContext";
 import ProtectedLink from "@/components/shared/ProtectedLink";
 
 
 
-const Profile = () => {
+const Profile = ({params}) => {
     const baseURL = process.env.NEXT_PUBLIC_API_URL;
     const { user } = useAuth();
     const [business, setBusiness] = useState(null);
+    const { id } = use(params);
 
     useEffect(() => {
         if (!user) {
             redirect('/');
         }
 
-        axios.get(baseURL + 'my-businesses/', { withCredentials: true })
+        axios.get(`${baseURL}my-business/${id}/`, { withCredentials: true })
             .then(response => {
-                if (response.data && response.data.length > 0) {
+                if (response.data) {
                     setBusiness(response.data); // Assuming you want the first business
                 } else {
                     setBusiness(null);
@@ -38,13 +39,7 @@ const Profile = () => {
                 <h1 className="text-2xl font-medium">My Businesses</h1>
                 {business && (
                     <>
-                        {business.map((b, index) => (
-                            <ProtectedLink href={`/my-business/${b.id}`} key={index} className="text-blue-500 p-3.5 rounded-lg block border border-gray-400 bg-white shadow-md mb-4">
-                                <h2 className="text-xl font-semibold text-black">{b.name}</h2>
-                                <p className="text-gray-600">{b.category}</p>
-                            
-                            </ProtectedLink>
-                        ))}
+                        {business.name}
                     </>
                 )}
             </div>
