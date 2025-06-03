@@ -7,7 +7,6 @@ import { useAuth } from "@/lib/AuthContext";
 import ProtectedLink from "@/components/shared/ProtectedLink";
 
 
-
 const Profile = ({params}) => {
     const baseURL = process.env.NEXT_PUBLIC_API_URL;
     const { user } = useAuth();
@@ -22,7 +21,7 @@ const Profile = ({params}) => {
         axios.get(`${baseURL}my-business/${id}/`, { withCredentials: true })
             .then(response => {
                 if (response.data) {
-                    setBusiness(response.data); // Assuming you want the first business
+                    setBusiness(response.data);
                 } else {
                     setBusiness(null);
                 }
@@ -31,7 +30,7 @@ const Profile = ({params}) => {
                 console.error("Error fetching business data:", error);
                 setBusiness(null);
             });
-    }, [])
+    }, [user])
 
     return (
         <>
@@ -39,7 +38,9 @@ const Profile = ({params}) => {
                 <h1 className="text-2xl font-medium">My Businesses</h1>
                 {business && (
                     <>
-                        {business.name}
+                        {business.name} <br />
+                        {business.address && business.address.city}
+                        {business.category.name}
                     </>
                 )}
             </div>

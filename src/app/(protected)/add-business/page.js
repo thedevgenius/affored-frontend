@@ -2,7 +2,7 @@
 
 import axios from "axios";
 import { useEffect } from "react";
-import { redirect } from 'next/navigation';
+import { redirect, useRouter } from 'next/navigation';
 import { useAuth } from "@/lib/AuthContext";
 import { Logout } from "@/lib/Logout";
 import dynamic from 'next/dynamic';
@@ -33,6 +33,7 @@ const addBusinessSchema = z.object({
 const Profile = () => {
     const baseURL = process.env.NEXT_PUBLIC_API_URL;
     const { user } = useAuth();
+    const router = useRouter();
 
     useEffect(() => {
         if (!user) {
@@ -55,12 +56,12 @@ const Profile = () => {
     });
 
     const onSubmit = (data) => {
-        console.log("Submitted Data:", data);
+        // console.log("Submitted Data:", data);
         axios.post(baseURL + 'business/add/', { category_id: data.category.value, name: data.name, description: data.description }, {withCredentials: true})
             .then((response) => {
-                if (response.status === 200) {
-                    // toast.success('Business Add successfully');
+                if (response.status == 201) {
                     console.log(response);
+                    router.push(`/my-business/${response.data.id}/add-address`);
                 }
             })
             .catch((error) => {

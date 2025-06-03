@@ -41,7 +41,7 @@ const Profile = () => {
                         {business.map((b, index) => (
                             <ProtectedLink href={`/my-business/${b.id}`} key={index} className="text-blue-500 p-3.5 rounded-lg block border border-gray-400 bg-white shadow-md mb-4">
                                 <h2 className="text-xl font-semibold text-black">{b.name}</h2>
-                                <p className="text-gray-600">{b.category}</p>
+                                <p className="text-gray-600">{b.category.name}</p>
                             
                             </ProtectedLink>
                         ))}
