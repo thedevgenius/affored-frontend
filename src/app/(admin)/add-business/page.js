@@ -1,16 +1,19 @@
 'use client';
 
-import axios from "axios";
 import { useEffect } from "react";
-import { redirect, useRouter } from 'next/navigation';
-import { useAuth } from "@/lib/AuthContext";
-import { Logout } from "@/lib/Logout";
 import dynamic from 'next/dynamic';
+import { redirect, useRouter } from 'next/navigation';
 
+import axios from "axios";
 import { toast } from "react-hot-toast";
+
 import { z } from "zod";
 import { useForm, Controller } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
+
+import { useAuth } from "@/lib/AuthContext";
+import { useAdmin } from "@/lib/AdminContext";
+import { Logout } from "@/lib/Logout";
 
 const CategorySelect = dynamic(() => import('@/components/shared/CategorySelect'), {
     ssr: false,
@@ -33,6 +36,7 @@ const addBusinessSchema = z.object({
 const Profile = () => {
     const baseURL = process.env.NEXT_PUBLIC_API_URL;
     const { user } = useAuth();
+    const { setStep, setBiz } = useAdmin();
     const router = useRouter();
 
     useEffect(() => {
@@ -56,12 +60,12 @@ const Profile = () => {
     });
 
     const onSubmit = (data) => {
-        // console.log("Submitted Data:", data);
         axios.post(baseURL + 'business/add/', { category_id: data.category.value, name: data.name, description: data.description }, {withCredentials: true})
             .then((response) => {
                 if (response.status == 201) {
-                    console.log(response);
-                    router.push(`/my-business/${response.data.id}/add-address`);
+                    router.push(`/my-business/${response.data.id}`);
+                    setStep('address');
+                    setBiz(response.data.id);
                 }
             })
             .catch((error) => {

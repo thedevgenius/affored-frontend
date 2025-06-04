@@ -1,9 +1,11 @@
 'use client';
 
+import { useAdmin } from "@/lib/AdminContext";
 import axios from "axios";
 import { use, useEffect, useState } from "react";
 import { redirect } from 'next/navigation';
 import { useAuth } from "@/lib/AuthContext";
+import { useMyBiz } from "@/lib/MyBizContext";
 import ProtectedLink from "@/components/shared/ProtectedLink";
 
 import { z } from "zod";
@@ -22,17 +24,27 @@ const addBusinessAddressSchema = z.object({
     }),
 });
 
-const AddAddress = ({ params }) => {
+const BusinessAddress = () => {
     const baseURL = process.env.NEXT_PUBLIC_API_URL;
     const { user } = useAuth();
-    const [business, setBusiness] = useState(null);
-    const { id } = use(params);
+    const { step, setStep } = useAdmin();
+    const { biz } = useMyBiz();
 
     useEffect(() => {
         if (!user) {
             redirect('/');
         }
-    }, []);
+    }, [user]);
+
+    useEffect(() => {
+        const onPopState = (event) => {
+            setStep('');
+        };
+        window.addEventListener('popstate', onPopState);
+        return () => {
+            window.removeEventListener('popstate', onPopState);
+        };
+    }, [setStep]);
 
     const {
         register,
@@ -82,11 +94,11 @@ const AddAddress = ({ params }) => {
     }
 
     const onSubmit = (data) => {
-        console.log(data);
-        axios.post(`${baseURL}my-business/address/add/`, {address: data.address, business_id: id}, {withCredentials: true})
+        axios.post(`${baseURL}my-business/address/add/`, {address: data.address, business_id: biz.id}, {withCredentials: true})
             .then((response) => {
                 if (response.status == 200) {
-                    console.log(response.data);
+                    reset();
+                    setStep('');
                 }
             })
     }
@@ -156,4 +168,4 @@ const AddAddress = ({ params }) => {
     )
 }
 
-export default AddAddress;
+export default BusinessAddress;
