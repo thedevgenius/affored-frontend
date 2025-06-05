@@ -12,7 +12,7 @@ import { z } from "zod";
 import { useForm, Controller } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 
-const addBusinessAddressSchema = z.object({
+const addBizContactSchema = z.object({
     address: z.object({
         address_1: z.string().min(1, "Street is required"),
         address_2: z.string().min(1, "Street is required"),
@@ -24,7 +24,7 @@ const addBusinessAddressSchema = z.object({
     }),
 });
 
-const BusinessAddress = () => {
+const BizContact = () => {
     const baseURL = process.env.NEXT_PUBLIC_API_URL;
     const { user } = useAuth();
     const { step, setStep } = useAdmin();
@@ -59,7 +59,7 @@ const BusinessAddress = () => {
         reset,
         formState: { errors, isSubmitting },
     } = useForm({
-        resolver: zodResolver(addBusinessAddressSchema),
+        resolver: zodResolver(addBizContactSchema),
         defaultValues: {
             address: {
                 address_1: '',
@@ -73,29 +73,6 @@ const BusinessAddress = () => {
         },
     });
 
-
-
-    const handlePincodeChange = (e) => {
-        let value = e.target.value.replace(/\D/g, '');
-        if (value.length > 6) {
-            value = value.slice(0, 6);
-        }
-        setValue('address.pincode', value);
-        if (value.length == 6) {
-            axios.get(`https://api.postalpincode.in/pincode/${value}`)
-                .then((response) => {
-                    if (response.data[0].Status == "Success") {
-                        setValue('address.state', response.data[0].PostOffice[0].State);
-                    }
-                })
-                .catch((error) => {
-                    console.error(error);
-                })
-        } else {
-            setValue('address.state', '');
-        }
-
-    }
 
     const onSubmit = (data) => {
         console.log(isSubmitting);
@@ -119,8 +96,8 @@ const BusinessAddress = () => {
     return (
         <>
             <div className="px-5 pt-5">
-                <h1 className="text-2xl font-medium mb-5">Add Address</h1>
-                <form onSubmit={handleSubmit(onSubmit)}>
+                <h1 className="text-2xl font-medium mb-5">Add Contact Details</h1>
+                {/* <form onSubmit={handleSubmit(onSubmit)}>
                     <input
                         type="text"
                         placeholder="Address Line 1"
@@ -174,11 +151,11 @@ const BusinessAddress = () => {
                     {errors.address?.state && <p className="text-xs font-light text-red-500">{errors.address.state.message}</p>}
 
                     <button className="btn w-full mt-5">SAVE & Continue</button>
-                </form>
+                </form> */}
             </div>
 
         </>
     )
 }
 
-export default BusinessAddress;
+export default BizContact;

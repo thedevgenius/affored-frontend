@@ -8,6 +8,7 @@ import { useAdmin } from "@/lib/AdminContext";
 import { useMyBiz } from "@/lib/MyBizContext";
 import StepButton from "@/components/shared/StepButton";
 import BusinessAddress from "@/components/shared/BusinessAddress";
+import BizContact from "@/components/shared/BizContact";
 
 const BusinessProfile = ({ params }) => {
     const { user } = useAuth();
@@ -20,6 +21,7 @@ const BusinessProfile = ({ params }) => {
             redirect('/');
         }
         setStep('');
+        console.log(biz);
     }, [user]);
 
     useEffect(() => {
@@ -33,6 +35,10 @@ const BusinessProfile = ({ params }) => {
         return <BusinessAddress />;
     }
 
+    if (step === 'contact') { 
+        return <BizContact />;
+    }
+
     return (
         <>
             <div className="px-5 pt-5">
@@ -40,9 +46,9 @@ const BusinessProfile = ({ params }) => {
                 {biz ? (
                     <div className="mt-5">
                         <h2 className="text-xl font-medium">{biz.name}</h2>
-                        <p>{biz.address?.city}</p>
                         <p>{biz.category?.name}</p>
-                        <StepButton step={'address'} className="btn w-full mt-5">Add Address</StepButton>
+                        <p>{biz.address?.city} -- <StepButton step={'address'} className="text-blue-600 underline cursor-pointer">{ biz.address ? 'Edit Address' : 'Add Address' }</StepButton></p>
+                        <p><StepButton step={'contact'} className="text-blue-600 underline cursor-pointer">{ biz.contact ? 'Edit Contact' : 'Add Contact' }</StepButton></p>
                     </div>
                 ) : (
                     <p className="mt-5">You have no business registered.</p>

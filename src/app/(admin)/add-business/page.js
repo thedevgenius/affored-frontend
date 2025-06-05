@@ -36,7 +36,7 @@ const addBusinessSchema = z.object({
 const Profile = () => {
     const baseURL = process.env.NEXT_PUBLIC_API_URL;
     const { user } = useAuth();
-    const { setStep, setBiz } = useAdmin();
+    const { setStep } = useAdmin();
     const router = useRouter();
 
     useEffect(() => {
