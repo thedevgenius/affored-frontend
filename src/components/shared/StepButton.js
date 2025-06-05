@@ -6,7 +6,6 @@ export default function StepButton({ step, children, ...props }) {
     const { setStep } = useAdmin();
 
     const handleClick = () => {
-        // Push a fake state
         window.history.pushState({ modalStep: step }, '', '');
         setStep(step);
     };

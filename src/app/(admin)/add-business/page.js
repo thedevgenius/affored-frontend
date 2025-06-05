@@ -62,14 +62,16 @@ const Profile = () => {
     const onSubmit = (data) => {
         axios.post(baseURL + 'business/add/', { category_id: data.category.value, name: data.name, description: data.description }, {withCredentials: true})
             .then((response) => {
-                if (response.status == 201) {
-                    router.push(`/my-business/${response.data.id}`);
-                    setStep('address');
-                    setBiz(response.data.id);
-                }
+            if (response.status == 201) {
+                router.push(`/my-business/${response.data.id}`);
+            }
             })
             .catch((error) => {
-                console.error(error);
+            console.error(error);
+            })
+            .finally(() => {
+                setStep('address');
+                toast.success("Business added successfully!");
             });
     };
 

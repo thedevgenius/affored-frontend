@@ -48,7 +48,7 @@ const BusinessProfile = ({ params }) => {
                         <h2 className="text-xl font-medium">{biz.name}</h2>
                         <p>{biz.category?.name}</p>
                         <p>{biz.address?.city} -- <StepButton step={'address'} className="text-blue-600 underline cursor-pointer">{ biz.address ? 'Edit Address' : 'Add Address' }</StepButton></p>
-                        <p><StepButton step={'contact'} className="text-blue-600 underline cursor-pointer">{ biz.contact ? 'Edit Contact' : 'Add Contact' }</StepButton></p>
+                        <p>{biz.contact?.phone} -- <StepButton step={'contact'} className="text-blue-600 underline cursor-pointer">{ biz.contact ? 'Edit Contact' : 'Add Contact' }</StepButton></p>
                     </div>
                 ) : (
                     <p className="mt-5">You have no business registered.</p>

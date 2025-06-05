@@ -6,7 +6,7 @@ import { use, useEffect, useState } from "react";
 import { redirect } from 'next/navigation';
 import { useAuth } from "@/lib/AuthContext";
 import { useMyBiz } from "@/lib/MyBizContext";
-import ProtectedLink from "@/components/shared/ProtectedLink";
+import { toast } from "react-hot-toast";
 
 import { z } from "zod";
 import { useForm, Controller } from "react-hook-form";
@@ -101,7 +101,7 @@ const BusinessAddress = () => {
         console.log(isSubmitting);
         const endpoint = biz.address ? 'update' : 'add';
         axios.post(
-            `${baseURL}my-business/address/${endpoint}/`,
+            `${baseURL}b/address/${endpoint}/`,
             { address: data.address, business_id: biz.id },
             { withCredentials: true }
         )
@@ -109,6 +109,7 @@ const BusinessAddress = () => {
                 if (response.status === 200) {
                     reset();
                     setStep('');
+                    toast.success('Address details saved successfully');
                 }
             })
             .catch((error) => {
@@ -128,6 +129,7 @@ const BusinessAddress = () => {
                         className="input p-4"
                     />
                     {errors.address?.address_1 && <p className="text-xs font-light text-red-500">{errors.address.address_1.message}</p>}
+                    
                     <input
                         type="text"
                         placeholder="Address Line 2"

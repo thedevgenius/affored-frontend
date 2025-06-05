@@ -6,21 +6,18 @@ import { use, useEffect, useState } from "react";
 import { redirect } from 'next/navigation';
 import { useAuth } from "@/lib/AuthContext";
 import { useMyBiz } from "@/lib/MyBizContext";
-import ProtectedLink from "@/components/shared/ProtectedLink";
+import { toast } from "react-hot-toast";
 
 import { z } from "zod";
 import { useForm, Controller } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 
 const addBizContactSchema = z.object({
-    address: z.object({
-        address_1: z.string().min(1, "Street is required"),
-        address_2: z.string().min(1, "Street is required"),
-        street: z.string().min(1, "Street is required"),
-        landmark: z.string().min(1, "Street is required"),
-        city: z.string().min(1, "City is required"),
-        state: z.string().min(1, "State is required"),
-        pincode: z.string().min(4, "Pincode must be at least 4 digits"),
+    contact: z.object({
+        phone: z.string().regex(/^\d{10}$/, "Enter a valid phone number").optional(),
+        phone_alt: z.string().optional(),
+        whatsapp: z.string().optional(),
+        email: z.string().email("Invalid email address").or(z.literal("")).optional(),
     }),
 });
 
@@ -34,8 +31,8 @@ const BizContact = () => {
         if (!user) {
             redirect('/');
         }
-        if (biz.address) {
-            reset({ address: biz.address });
+        if (biz.contact) {
+            reset({ contact: biz.contact });
         }
 
     }, [user]);
@@ -61,31 +58,39 @@ const BizContact = () => {
     } = useForm({
         resolver: zodResolver(addBizContactSchema),
         defaultValues: {
-            address: {
-                address_1: '',
-                address_2: '',
-                street: '',
-                landmark: '',
-                city: '',
-                state: '',
-                pincode: '',
+            contact: {
+                phone: '',
+                phone_alt: '',
+                whatsapp: '',
+                email: '',
             },
         },
     });
 
+    const handleSamePhone = (e) => {
+        if (e.target.checked) {
+            setValue("contact.phone", user.phone);
+            document.getElementById("phone").setAttribute("disabled", true);
+        } else {
+            setValue("contact.phone", "");
+            document.getElementById("phone").removeAttribute("disabled");
+        }
+    };
 
     const onSubmit = (data) => {
         console.log(isSubmitting);
-        const endpoint = biz.address ? 'update' : 'add';
+        const endpoint = biz.contact ? 'update' : 'add';
         axios.post(
-            `${baseURL}my-business/address/${endpoint}/`,
-            { address: data.address, business_id: biz.id },
+            `${baseURL}b/contact/${endpoint}/`,
+            { contact: data.contact, business_id: biz.id },
             { withCredentials: true }
         )
             .then((response) => {
                 if (response.status === 200) {
                     reset();
                     setStep('');
+                    toast.success('Contact details saved successfully');
+                    window.history.back();
                 }
             })
             .catch((error) => {
@@ -97,61 +102,42 @@ const BizContact = () => {
         <>
             <div className="px-5 pt-5">
                 <h1 className="text-2xl font-medium mb-5">Add Contact Details</h1>
-                {/* <form onSubmit={handleSubmit(onSubmit)}>
+                <form onSubmit={handleSubmit(onSubmit)}>
                     <input
                         type="text"
-                        placeholder="Address Line 1"
-                        {...register("address.address_1")}
+                        placeholder="Phone"
+                        {...register("contact.phone")}
                         className="input p-4"
+                        id="phone"
                     />
-                    {errors.address?.address_1 && <p className="text-xs font-light text-red-500">{errors.address.address_1.message}</p>}
-                    <input
-                        type="text"
-                        placeholder="Address Line 2"
-                        {...register("address.address_2")}
-                        className="input p-4 mt-4"
-                    />
-                    {errors.address?.address_2 && <p className="text-xs font-light text-red-500">{errors.address.address_2.message}</p>}
-                    <input
-                        type="text"
-                        placeholder="Street Address"
-                        {...register("address.street")}
-                        className="input p-4 mt-4"
-                    />
-                    {errors.address?.street && <p className="text-xs font-light text-red-500">{errors.address.street.message}</p>}
-                    <input
-                        type="text"
-                        placeholder="Landmark"
-                        {...register("address.landmark")}
-                        className="input p-4 mt-4"
-                    />
-                    {errors.address?.landmark && <p className="text-xs font-light text-red-500">{errors.address.landmark.message}</p>}
-                    <input
-                        type="text"
-                        placeholder="PIN"
-                        {...register("address.pincode")}
-                        onChange={handlePincodeChange}
-                        className="input p-4 mt-4"
-                    />
-                    {errors.address?.pincode && <p className="text-xs font-light text-red-500">{errors.address.pincode.message}</p>}
-                    <input
-                        type="text"
-                        placeholder="City"
-                        {...register("address.city")}
-                        className="input p-4 mt-4"
-                    />
-                    {errors.address?.city && <p className="text-xs font-light text-red-500">{errors.address.city.message}</p>}
-                    <input
-                        type="text"
-                        placeholder="State"
-                        {...register("address.state")}
-                        disabled
-                        className="input p-4 mt-4"
-                    />
-                    {errors.address?.state && <p className="text-xs font-light text-red-500">{errors.address.state.message}</p>}
+                    {errors.contact?.phone && <p className="text-xs font-light text-red-500">{errors.contact.phone.message}</p>}
 
+                    <input type="checkbox" className="mr-1" id="isSamePhone" onChange={handleSamePhone} />
+                    <label htmlFor="isSamePhone">Same as Phone</label>
+                    
+                    <input
+                        type="text"
+                        placeholder="Alternate Phone"
+                        {...register("contact.phone_alt")}
+                        className="input p-4 mt-4"
+                    />
+                    {errors.contact?.phone_alt && <p className="text-xs font-light text-red-500">{errors.contact.phone_alt.message}</p>}
+                    <input
+                        type="text"
+                        placeholder="WhatsApp"
+                        {...register("contact.whatsapp")}
+                        className="input p-4 mt-4"
+                    />
+                    {errors.contact?.whatsapp && <p className="text-xs font-light text-red-500">{errors.contact.whatsapp.message}</p>}
+                    <input
+                        type="email"
+                        placeholder="Email"
+                        {...register("contact.email")}
+                        className="input p-4 mt-4"
+                    />
+                    {errors.contact?.email && <p className="text-xs font-light text-red-500">{errors.contact.email.message}</p>}
                     <button className="btn w-full mt-5">SAVE & Continue</button>
-                </form> */}
+                </form>
             </div>
 
         </>
