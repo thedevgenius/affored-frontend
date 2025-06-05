@@ -3,7 +3,7 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
 
-const GOOGLE_API_KEY = process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY;
+const GOOGLE_API_KEY = process.env.GOOGLE_MAPS_API_KEY;
 
 const SelectLocation = () => {
     const [coords, setCoords] = useState({ lat: null, lng: null });
@@ -47,14 +47,13 @@ const SelectLocation = () => {
             ) {
                 setAddress(addressText);
             } else {
-                console.log('getting Address');
                 axios.get(`https://maps.googleapis.com/maps/api/geocode/json?latlng=${coords.lat},${coords.lng}&key=${GOOGLE_API_KEY}`)
                     .then((response) => {
                         const comps = response.data.results?.[0]?.address_components || [];
-                        console.log(comps);
                         const desiredTypes = {
                             sublocality_level_2: "",
                             sublocality_level_1: "",
+                            locality: "",
                             administrative_area_level_3: "",
                             administrative_area_level_1: "",
                             postal_code: ""
@@ -71,6 +70,7 @@ const SelectLocation = () => {
                         const {
                             sublocality_level_2,
                             sublocality_level_1,
+                            locality,
                             administrative_area_level_3: adminLabel3,
                             administrative_area_level_1: adminLabel1,
                             postal_code: postalCode
@@ -79,6 +79,7 @@ const SelectLocation = () => {
                         const parts = [
                             sublocality_level_2,
                             sublocality_level_1,
+                            locality,
                             adminLabel3,
                             adminLabel1,
                             postalCode
