@@ -3,7 +3,7 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
 
-const GOOGLE_API_KEY = process.env.GOOGLE_MAPS_API_KEY;
+const GOOGLE_API_KEY = process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY;
 
 const SelectLocation = () => {
     const [coords, setCoords] = useState({ lat: null, lng: null });
@@ -20,7 +20,7 @@ const SelectLocation = () => {
                         lng: position.coords.longitude,
                     };
                     setCoords(newCoords);
-
+                    localStorage.setItem('newcoords', JSON.stringify(newCoords));
                 },
                 (err) => {
                     setError(err.message || "Permission denied");
