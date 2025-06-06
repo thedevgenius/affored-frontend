@@ -2,13 +2,14 @@
 
 import axios from "axios";
 import { use, useEffect, useState } from "react";
-import { redirect } from 'next/navigation';
+import { redirect, useRouter } from 'next/navigation';
 import { useAuth } from "@/lib/AuthContext";
 import { useAdmin } from "@/lib/AdminContext";
 import { useMyBiz } from "@/lib/MyBizContext";
 import StepButton from "@/components/shared/StepButton";
 import BusinessAddress from "@/components/shared/BusinessAddress";
 import BizContact from "@/components/shared/BizContact";
+import { set } from "zod";
 
 const BusinessProfile = ({ params }) => {
     const { user } = useAuth();
@@ -20,8 +21,12 @@ const BusinessProfile = ({ params }) => {
         if (!user) {
             redirect('/');
         }
-        setStep('');
-        console.log(biz);
+        if (localStorage.getItem('source') == 'add-business') {
+            window.history.pushState({ modalStep: 'address' }, '', '');
+            setStep('address');
+        } else {
+            setStep('');
+        }
     }, [user]);
 
     useEffect(() => {
@@ -29,6 +34,17 @@ const BusinessProfile = ({ params }) => {
             refreshBiz(id);
         }
     }, [step, id, refreshBiz]);
+
+    useEffect(() => {
+        const onPopState = (event) => {
+            setStep('');
+            localStorage.removeItem('source');
+        };
+        window.addEventListener('popstate', onPopState);
+        return () => {
+            window.removeEventListener('popstate', onPopState);
+        };
+    }, [setStep]);
 
 
     if (step === 'address') {

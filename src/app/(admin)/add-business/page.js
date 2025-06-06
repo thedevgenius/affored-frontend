@@ -36,7 +36,7 @@ const addBusinessSchema = z.object({
 const Profile = () => {
     const baseURL = process.env.NEXT_PUBLIC_API_URL;
     const { user } = useAuth();
-    const { setStep } = useAdmin();
+    const { step, setStep } = useAdmin();
     const router = useRouter();
 
     useEffect(() => {
@@ -60,19 +60,21 @@ const Profile = () => {
     });
 
     const onSubmit = (data) => {
-        axios.post(baseURL + 'business/add/', { category_id: data.category.value, name: data.name, description: data.description }, {withCredentials: true})
+        axios.post(baseURL + 'business/add/', { category_id: data.category.value, name: data.name, description: data.description }, { withCredentials: true })
             .then((response) => {
-            if (response.status == 201) {
-                router.push(`/my-business/${response.data.id}`);
-            }
+                if (response.status == 201) {
+                    localStorage.setItem('source', 'add-business');
+                    
+                    router.replace(`/my-business/${response.data.id}`);
+                }
             })
             .catch((error) => {
-            console.error(error);
+                console.error(error);
             })
-            .finally(() => {
-                setStep('address');
-                toast.success("Business added successfully!");
-            });
+            // .finally(() => {
+            //     setStep('address');
+            //     toast.success("Business added successfully!");
+            // });
     };
 
     const onError = (errors) => {

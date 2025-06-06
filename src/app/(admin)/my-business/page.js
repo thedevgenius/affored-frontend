@@ -30,25 +30,32 @@ const Profile = () => {
                 console.error("Error fetching business data:", error);
                 setBusiness(null);
             });
-    }, [])
+    }, []);
+
+    
 
     return (
         <>
             <div className="px-5 pt-5">
                 <h1 className="text-2xl font-medium">My Businesses</h1>
-                {business && (
+                {business ? (
                     <>
                         {business.map((b, index) => (
                             <ProtectedLink href={`/my-business/${b.id}`} key={index} className="text-blue-500 p-3.5 rounded-lg block border border-gray-400 bg-white shadow-md mb-4">
                                 <h2 className="text-xl font-semibold text-black">{b.name}</h2>
                                 <p className="text-gray-600">{b.category.name}</p>
-                            
                             </ProtectedLink>
                         ))}
                     </>
+                ) : (
+                        <>
+                            <p>Getting</p>
+                        </>
                 )}
+
+                <p><ProtectedLink href={'add-business'} className="btn w-full">Add New Business</ProtectedLink></p>
             </div>
-            
+
         </>
     )
 }

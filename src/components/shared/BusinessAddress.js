@@ -40,15 +40,6 @@ const BusinessAddress = () => {
 
     }, [user]);
 
-    useEffect(() => {
-        const onPopState = (event) => {
-            setStep('');
-        };
-        window.addEventListener('popstate', onPopState);
-        return () => {
-            window.removeEventListener('popstate', onPopState);
-        };
-    }, [setStep]);
 
 
     const {
@@ -109,6 +100,7 @@ const BusinessAddress = () => {
                 if (response.status === 200) {
                     reset();
                     setStep('');
+                    localStorage.removeItem('source');
                     toast.success('Address details saved successfully');
                 }
             })

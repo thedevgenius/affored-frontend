@@ -24,7 +24,6 @@ const Profile = () => {
                 {user && (
                     <div>
                         <p>Phone: {user.phone}</p>
-                        <p><ProtectedLink href={'add-business'}>Add New Business</ProtectedLink></p>
                         <p><ProtectedLink href={'my-business'}>My Business</ProtectedLink></p>
                         <button onClick={Logout} className="text-red-600 mt-10 cursor-pointer">Logout</button>
                     </div>
