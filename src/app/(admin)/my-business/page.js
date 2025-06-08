@@ -49,7 +49,7 @@ const Profile = () => {
                     </>
                 ) : (
                         <>
-                            <p>Getting</p>
+                            <p>You have no business yet</p>
                         </>
                 )}
 

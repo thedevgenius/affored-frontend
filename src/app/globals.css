@@ -3,7 +3,7 @@
 :root {
     --background: #ffffff;
     --foreground: #171717;
-    --primary: #43A047;
+    --primary: #008000;
     --secondary: #1E88E5;
     
 }
@@ -24,6 +24,10 @@ body {
     background: var(--background);
     color: var(--foreground);
     font-family: var(--font-inter);
+}
+a{
+    color: var(--primary);
+    text-decoration: none;
 }
 
 .btn {
@@ -82,4 +86,12 @@ body {
     display: flex;
     justify-content: space-between;
     align-items: center;
+}
+
+.AdminHeader{
+    padding: 12px 5px;
+    border-bottom: 1px solid #ddd;
+}
+.AdminContent{
+    padding: 15px 10px;
 }
