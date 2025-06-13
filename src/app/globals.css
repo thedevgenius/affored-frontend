@@ -23,7 +23,7 @@
 body {
     background: var(--background);
     color: var(--foreground);
-    font-family: var(--font-inter);
+    font-family: var(--font-nunito);
 }
 a{
     color: var(--primary);
@@ -61,10 +61,10 @@ a{
     width: 45px;
     height: 45px;
     display: flex;
-    box-shadow: 0 0 10px #cecece;
+    box-shadow: 0 0 5px #cecece;
     position: absolute;
-    top: 20px;
-    left: 20px;
+    top: 15px;
+    left: 15px;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -94,4 +94,25 @@ a{
 }
 .AdminContent{
     padding: 15px 10px;
+}
+
+.SearchInput input{
+    width: 100%;
+    height: 50px;
+    background-color: #fff;
+    border-radius: 10px;
+    box-shadow: 0 0 3px #ddd;
+    padding-left: 45px;
+    outline: none;
+    border: 1px solid #eaeaea;
+}
+.SearchInput{
+    position: relative;
+}
+.SearchInput img{
+    width: 20px;
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    left: 15px;
 }

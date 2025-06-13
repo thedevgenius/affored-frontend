@@ -11,24 +11,26 @@ export default function Home() {
     const { user } = useAuth();
     useEffect(() => {
 
-    }, [])
+    }, []);
 
     return (
         <>
-            <div className="p-3">
-                <h1>Home Page </h1> <br />
-                {user && (
-                    <>
-                        <p>Phone: {user.phone}</p> <br />
-                        
-                    </>
-                )}
-                <SelectLocation /> <br />
-                <ProtectedLink href={'profile'} className="text-blue-600 underline">Profile</ProtectedLink>
-                
+            <div className="flex items-center justify-between pt-1.5 px-3">
+                <div className="WelcomeText">
+                    <h6 className="font-semibold leading-4">Book or Buy?</h6>
+                    <h1 className="font-bold text-xl">We have it all</h1>
+                </div>
+                <div className="UserData">
+                    <ProtectedLink href="/profile"><img src="/icons/user-profile.svg" width={30} alt="User Profile Icon" /></ProtectedLink>
+                </div>
+            </div>
+
+            <div className="SearchBar px-3 py-3">
+                <div className="SearchInput">
+                    <img src="/icons/search.svg" alt="Search Icon" />
+                    <input type="text" placeholder="Search..." />
+                </div>
             </div>
         </>
-        
-        
     );
 }

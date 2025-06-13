@@ -129,7 +129,7 @@ const Login = () => {
         <div>
             {step == 'send' && (
                 <div className={`login_container ${openLogin ? 'active' : ''}`}>
-                    <button className="back-btn" onClick={handleLoginClose}>X</button>
+                    <button className="back-btn" onClick={handleLoginClose}><img src="/icons/arrow-left.svg" alt="Back Icon" /></button>
                     <div className="login_form">
                         <h1 className="text-center text-3xl font-medium mb-5">Login</h1>
                         <form onSubmit={handleSubmit(onSubmit, onError)}>

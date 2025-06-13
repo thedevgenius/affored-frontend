@@ -1,4 +1,4 @@
-import { Inter } from 'next/font/google';
+import { Inter, Nunito } from 'next/font/google';
 import { cookies } from "next/headers";
 import { Toaster } from "react-hot-toast";
 import { AuthProvider } from "@/lib/AuthContext";
@@ -9,6 +9,12 @@ const inter = Inter({
     subsets: ['latin'],
     display: 'swap', // Optional: Improves UX by swapping font after load
     variable: '--font-inter', // Optional: use as CSS variable
+});
+
+const nunito = Nunito({
+    subsets: ['latin'],
+    display: 'swap',
+    variable: '--font-nunito',
 });
 
 export const metadata = {
@@ -37,7 +43,7 @@ export default async function RootLayout({ children }) {
     return (
         <html lang="en">
             <body
-                className={`${inter.className} antialiased`}
+                className={`${nunito.className} antialiased`}
             >
                 <AuthProvider initialUser={user}>
                     {children}
