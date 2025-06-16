@@ -1,0 +1,25 @@
+.BottomNav{
+    width: 100%;
+    position: fixed;
+    bottom: 0;
+    padding: 10px 25px;
+    box-shadow: 0 0 10px #ddd;
+    background-color: #fff;
+}
+.BottomNav ul{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+.BottomNav ul li{
+    text-align: center;
+}
+.BottomNav ul li span{
+    color: #8181A0;
+    font-size: 12px;
+    font-weight: 500;
+}
+.BottomNav ul li a img{
+    margin: 0 auto;
+    width: 20px;
+}

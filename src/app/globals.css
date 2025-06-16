@@ -4,8 +4,9 @@
     --background: #ffffff;
     --foreground: #171717;
     --primary: #008000;
-    --secondary: #1E88E5;
-    
+    --secondary: #193D8B;
+    --danger: #fb2c36;
+
 }
 
 @theme inline {
@@ -24,95 +25,141 @@ body {
     background: var(--background);
     color: var(--foreground);
     font-family: var(--font-nunito);
+    overflow-x: hidden;
 }
-a{
+
+a {
     color: var(--primary);
     text-decoration: none;
 }
 
-.btn {
-    display: inline-block;
-    padding: 12px 25px;
-    border-radius: 30px;
+
+.Btn{
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    padding: 10px 30px;
+    text-align: center;
+    font-size: 18px;
+    border-radius: 10px;
+    font-weight: 600;
+}
+.BtnSm {
+    padding: 7px 20px;
+    font-size: 15px;
+    border-radius: 7px;
+}
+
+.BtnOutlinePrimary {
+    border: 1px solid var(--primary);
+    color: var(--primary);
+    background-color: transparent;
+}
+
+.BtnOutlinePrimary svg {
+    fill: var(--primary);
+}
+
+.BtnOutlinePrimary:hover {
     background-color: var(--primary);
-    color: #fff;
+    color: var(--background);
 }
 
-.btn:disabled {
-    opacity: 0.5;
-    cursor: not-allowed;
+.BtnOutlinePrimary:hover svg {
+    fill: #fff;
 }
 
-.input {
-    width: 100%;
-    height: 48px;
-    border: 1px solid #d8d8d8;
-    outline: none;
-    border-radius: 30px;
-    color: #000;
+.BtnOutlineSecondary {
+    border: 1px solid var(--secondary);
+    color: var(--secondary);
+    background-color: transparent;
 }
 
-.input-error {
-    border: 1px solid red;
+.BtnOutlineSecondary svg {
+    fill: var(--secondary);
 }
 
-.back-btn {
-    border-radius: 50%;
-    width: 45px;
-    height: 45px;
-    display: flex;
-    box-shadow: 0 0 5px #cecece;
+.BtnOutlineSecondary:hover {
+    background-color: var(--secondary);
+    color: var(--background);
+}
+
+.BtnOutlineSecondary:hover svg {
+    fill: #fff;
+}
+
+.BtnPrimary {
+    background-color: var(--primary);
+    color: var(--background);
+    border: none;
+}
+
+.InputItem {
+    position: relative;
+}
+
+.InputItem label {
     position: absolute;
-    top: 15px;
-    left: 15px;
+    cursor: text;
+    z-index: 2;
+    top: 13px;
+    left: 10px;
+    font-size: 14px;
+    font-weight: 600;
+    background: #fff;
+    padding: 0 10px;
+    color: #999;
+    transition: all .3s ease
+}
+
+.InputItem input:focus+label,
+.InputItem input:not(:placeholder-shown)+label,
+.InputItem textarea:focus+label,
+.InputItem textarea:not(:placeholder-shown)+label  {
+    font-size: 12px;
+    top: -9px;
+    color: var(--secondary);
+    font-weight: 700;
+}
+.InputItem input:focus,
+.InputItem textarea:focus {
+    border-color: var(--secondary);
+}
+
+.Input,
+.Textarea {
+    border: 1px solid #ddd;
+    width: 100%;
+    height: 50px;
+    padding: 0 15px;
+    border-radius: 10px;
+    outline: none;
+    font-weight: 600;
+}
+.Textarea{
+    padding: 15px;
+    height: 150px;
+    resize: none;
+}
+
+.InputError{
+    border: 1px solid var(--danger);
+}
+.ErrorMessage{
+    color: var(--danger);
+    font-size: 12px;
+}
+
+/*=======================================Loader==================================*/
+.LoaderContainer{
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: var(--primary);
     display: flex;
     align-items: center;
     justify-content: center;
-}
-
-
-
-.footer {
-    position: fixed;
-    bottom: 20px;
-    left: 20px;
-    width: calc(100% - 40px);
-    border-radius: 35px;
-    box-shadow: 0 0 20px #ddd;
-    padding: 15px 20px;
-}
-
-.footer ul {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-}
-
-.AdminHeader{
-    padding: 12px 5px;
-    border-bottom: 1px solid #ddd;
-}
-.AdminContent{
-    padding: 15px 10px;
-}
-
-.SearchInput input{
-    width: 100%;
-    height: 50px;
-    background-color: #fff;
-    border-radius: 10px;
-    box-shadow: 0 0 3px #ddd;
-    padding-left: 45px;
-    outline: none;
-    border: 1px solid #eaeaea;
-}
-.SearchInput{
-    position: relative;
-}
-.SearchInput img{
-    width: 20px;
-    position: absolute;
-    top: 50%;
-    transform: translateY(-50%);
-    left: 15px;
 }

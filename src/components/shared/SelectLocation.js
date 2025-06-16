@@ -9,7 +9,7 @@ const SelectLocation = () => {
     const [coords, setCoords] = useState({ lat: null, lng: null });
     const [error, setError] = useState(null);
     const [address, setAddress] = useState('');
-    
+
 
     useEffect(() => {
         if (navigator.geolocation) {
@@ -47,6 +47,7 @@ const SelectLocation = () => {
             ) {
                 setAddress(addressText);
             } else {
+                console.log("API Called");
                 axios.get(`https://maps.googleapis.com/maps/api/geocode/json?latlng=${coords.lat},${coords.lng}&key=${GOOGLE_API_KEY}`)
                     .then((response) => {
                         const comps = response.data.results?.[0]?.address_components || [];
@@ -100,13 +101,14 @@ const SelectLocation = () => {
 
     return (
         <>
-            {address ? (
-                <p className="text-xs text-gray-500">{address}</p>
-            ) : error ? (
-                <p className="text-xs text-gray-500">Select location</p>
-            ) : (
-                <p className="text-xs text-gray-500">Getting Location</p>
-            )}
+            <p className="text-base text-white">{address ? (
+                <>{address}</>
+                ) : error ? (
+                    <>Select location</>
+                ) : (
+                    <>Getting Location</>
+                )}
+            </p>
         </>
     )
 }

@@ -41,7 +41,7 @@ const Profile = () => {
             <div className="AdminContent">
                 {user && (
                     <>
-                        <h2 className="text-xl font-medium">{user.first_name} {user.last_name}</h2>
+                        <h2 className="text-xl font-medium uppercase">{user.first_name} {user.last_name}</h2>
                         <div className="flex items-center gap-1">
                             <img src="/icons/call.svg" width={13} alt="" />
                             <p className="text-xs text-gray-500">{ user.phone }</p>

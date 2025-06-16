@@ -14,13 +14,13 @@ import { zodResolver } from "@hookform/resolvers/zod";
 
 const addBusinessAddressSchema = z.object({
     address: z.object({
-        address_1: z.string().min(1, "Street is required"),
-        address_2: z.string().min(1, "Street is required"),
-        street: z.string().min(1, "Street is required"),
-        landmark: z.string().min(1, "Street is required"),
+        address_1: z.string().min(1, "Please enter a Flat, House no., Building, Apartment"),
+        address_2: z.string().min(1, "PLease enter Area, Street, Sector, Village"),
+        // street: z.string().min(1, "Street is required"),
+        landmark: z.string().optional(),
+        pincode: z.string().min(4, "Pincode must be at least 4 digits"),
         city: z.string().min(1, "City is required"),
         state: z.string().min(1, "State is required"),
-        pincode: z.string().min(4, "Pincode must be at least 4 digits"),
     }),
 });
 
@@ -99,8 +99,13 @@ const BusinessAddress = () => {
             .then((response) => {
                 if (response.status === 200) {
                     reset();
-                    setStep('');
-                    localStorage.removeItem('source');
+                    if (localStorage.getItem('source') === 'add-business') { 
+                        setStep('contact');
+                        window.history.pushState({ modalStep: 'contact' }, '', '');
+                    } else {
+                        setStep('');
+                        localStorage.removeItem('source');   
+                    }
                     toast.success('Address details saved successfully');
                 }
             })
@@ -111,63 +116,111 @@ const BusinessAddress = () => {
 
     return (
         <>
-            <div className="px-5 pt-5">
-                <h1 className="text-2xl font-medium mb-5">Add Address</h1>
-                <form onSubmit={handleSubmit(onSubmit)}>
-                    <input
-                        type="text"
-                        placeholder="Address Line 1"
-                        {...register("address.address_1")}
-                        className="input p-4"
-                    />
-                    {errors.address?.address_1 && <p className="text-xs font-light text-red-500">{errors.address.address_1.message}</p>}
-                    
-                    <input
-                        type="text"
-                        placeholder="Address Line 2"
-                        {...register("address.address_2")}
-                        className="input p-4 mt-4"
-                    />
-                    {errors.address?.address_2 && <p className="text-xs font-light text-red-500">{errors.address.address_2.message}</p>}
-                    <input
-                        type="text"
-                        placeholder="Street Address"
-                        {...register("address.street")}
-                        className="input p-4 mt-4"
-                    />
-                    {errors.address?.street && <p className="text-xs font-light text-red-500">{errors.address.street.message}</p>}
-                    <input
-                        type="text"
-                        placeholder="Landmark"
-                        {...register("address.landmark")}
-                        className="input p-4 mt-4"
-                    />
-                    {errors.address?.landmark && <p className="text-xs font-light text-red-500">{errors.address.landmark.message}</p>}
-                    <input
-                        type="text"
-                        placeholder="PIN"
-                        {...register("address.pincode")}
-                        onChange={handlePincodeChange}
-                        className="input p-4 mt-4"
-                    />
-                    {errors.address?.pincode && <p className="text-xs font-light text-red-500">{errors.address.pincode.message}</p>}
-                    <input
-                        type="text"
-                        placeholder="City"
-                        {...register("address.city")}
-                        className="input p-4 mt-4"
-                    />
-                    {errors.address?.city && <p className="text-xs font-light text-red-500">{errors.address.city.message}</p>}
-                    <input
-                        type="text"
-                        placeholder="State"
-                        {...register("address.state")}
-                        disabled
-                        className="input p-4 mt-4"
-                    />
-                    {errors.address?.state && <p className="text-xs font-light text-red-500">{errors.address.state.message}</p>}
+            <div className="AdminPageHeader px-3 py-3.5 border-b border-gray-100 shadow-sm">
+                <div className="flex items-center gap-4">
+                    <button><img src="/icons/arrow-left-long.svg" alt="Back Button" /></button> <h1 className="text-lg font-bold uppercase">Add Address</h1>
+                </div>
+            </div>
 
-                    <button className="btn w-full mt-5">SAVE & Continue</button>
+            <div className="px-3 py-7">
+                <div className="CurrentLocationBtn mb-3">
+                    <button type="button">Use my current location </button>
+                </div>
+
+                <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
+                    
+                    <div className="InputItem">
+                        <input
+                            type="text"
+                            id="address_1"
+                            name="address_1"
+                            autoFocus={false}
+                            autoComplete="off"
+                            placeholder=""
+                            {...register("address.address_1")}
+                            className={`Input ${errors.address?.address_1 ? 'InputError' : ''}`}
+                        />
+                        <label htmlFor="address_1">Flat, House no., Building, Apartment</label>
+                        {errors.address?.address_1 && <p className="text-xs font-light text-red-500">{errors.address.address_1.message}</p>}
+                    </div>
+
+                    <div className="InputItem">
+                        <input
+                            type="text"
+                            id="address_2"
+                            name="address_2"
+                            autoFocus={false}
+                            autoComplete="off"
+                            placeholder=""
+                            {...register("address.address_2")}
+                            className={`Input ${errors.address?.address_2 ? 'InputError' : ''}`}
+                        />
+                        <label htmlFor="address_2">Area, Street, Sector, Village</label>
+                        {errors.address?.address_2 && <p className="text-xs font-light text-red-500">{errors.address.address_2.message}</p>}
+                    </div>
+
+                    <div className="InputItem">
+                        <input
+                            type="text"
+                            id="landmark"
+                            name="landmark"
+                            autoFocus={false}
+                            autoComplete="off"
+                            placeholder=""
+                            {...register("address.landmark")}
+                            className={`Input ${errors.address?.landmark ? 'InputError' : ''}`}
+                        />
+                        <label htmlFor="landmark">Landmark</label>
+                        {errors.address?.landmark && <p className="text-xs font-light text-red-500">{errors.address.landmark.message}</p>}
+                    </div>
+
+                    <div className="InputItem">
+                        <input
+                            type="text"
+                            id="pincode"
+                            name="pincode"
+                            autoFocus={false}
+                            autoComplete="off"
+                            placeholder=""
+                            {...register("address.pincode")}
+                            onChange={handlePincodeChange}
+                            className={`Input ${errors.address?.pincode ? 'InputError' : ''}`}
+                        />
+                        <label htmlFor="pincode">Pincode</label>
+                        {errors.address?.pincode && <p className="text-xs font-light text-red-500">{errors.address.pincode.message}</p>}
+                    </div>
+
+                    <div className="InputItem">
+                        <input
+                            type="text"
+                            id="city"
+                            name="city"
+                            autoFocus={false}
+                            autoComplete="off"
+                            placeholder=""
+                            {...register("address.city")}
+                            className={`Input ${errors.address?.city ? 'InputError' : ''}`}
+                        />
+                        <label htmlFor="city">City</label>
+                        {errors.address?.city && <p className="text-xs font-light text-red-500">{errors.address.city.message}</p>}
+                    </div>
+
+                    <div className="InputItem">
+                        <input
+                            type="text"
+                            id="state"
+                            name="state"
+                            autoFocus={false}
+                            autoComplete="off"
+                            placeholder=""
+                            {...register("address.state")}
+                            className={`Input ${errors.address?.state ? 'InputError' : ''}`}
+                        />
+                        <label htmlFor="state">State</label>
+                        {errors.address?.state && <p className="text-xs font-light text-red-500">{errors.address.state.message}</p>}
+                    </div>        
+
+                    <button type="submit" className="Btn BtnPrimary w-full">Save</button>
                 </form>
             </div>
 

@@ -33,7 +33,7 @@ const addBusinessSchema = z.object({
         }),
 });
 
-const Profile = () => {
+const AddBusiness = () => {
     const baseURL = process.env.NEXT_PUBLIC_API_URL;
     const { user } = useAuth();
     const { step, setStep } = useAdmin();
@@ -64,17 +64,16 @@ const Profile = () => {
             .then((response) => {
                 if (response.status == 201) {
                     localStorage.setItem('source', 'add-business');
-                    
                     router.replace(`/my-business/${response.data.id}`);
                 }
             })
             .catch((error) => {
                 console.error(error);
             })
-            // .finally(() => {
-            //     setStep('address');
-            //     toast.success("Business added successfully!");
-            // });
+        // .finally(() => {
+        //     setStep('address');
+        //     toast.success("Business added successfully!");
+        // });
     };
 
     const onError = (errors) => {
@@ -86,45 +85,59 @@ const Profile = () => {
 
 
     return (
-        <div className="px-5 pt-5 max-w-xl mx-auto">
-            <h1 className="text-2xl font-semibold mb-4">Add New Business</h1>
-
-            <form onSubmit={handleSubmit(onSubmit, onError)} className="space-y-4">
-                <input
-                    type="text"
-                    className={`input px-4 w-full ${errors.name ? '!border-red-400 border' : ''}`}
-                    placeholder="Enter Business Name"
-                    {...register("name")}
-                />
-                {errors.name && <p className="text-red-500 text-xs">{errors.name.message}</p>}
-
-                <textarea
-                    className={`input px-4 mt-2 !h-32 w-full ${errors.description ? '!border-red-400 border' : ''}`}
-                    placeholder="Enter Business Description"
-                    {...register("description")}
-                />
-                {errors.description && <p className="text-red-500 text-xs">{errors.description.message}</p>}
-
-                <div className="mt-2">
-                    <label className="block text-sm font-medium mb-1">Category</label>
-                    <Controller
-                        name="category"
-                        control={control}
-                        render={({ field }) => (
-                            <CategorySelect field={field} error={errors.category} />
-                        )}
-                    />
+        <>
+            <div className="AdminPageHeader px-3 py-3.5 border-b border-gray-100 shadow-sm">
+                <div className="flex items-center gap-4">
+                    <button><img src="/icons/arrow-left-long.svg" alt="Back Button" /></button> <h1 className="text-lg font-bold uppercase">Add New Business</h1>
                 </div>
-                <button type="submit" className="btn w-full mt-5">ADD</button>
-            </form>
+            </div>
 
-            {user && (
-                <div>
-                    <button onClick={Logout} className="text-red-600 mt-10 cursor-pointer">Logout</button>
-                </div>
-            )}
-        </div>
+            <div className="px-3 py-7">
+                <form onSubmit={handleSubmit(onSubmit, onError)} className="space-y-4">
+
+                    <div className="InputItem">
+                        <input
+                            type="text"
+                            id="name"
+                            autoFocus={false}
+                            autoComplete="off"
+                            placeholder=""
+                            className={`Input ${errors.name ? 'InputError' : ''}`}
+                            {...register("name")}
+                        />
+                        <label htmlFor="name">Business Name</label>
+                        {errors.name && <p className="ErrorMessage">{errors.name.message}</p>}
+                    </div>
+
+                    <div className="InputItem">
+                        <textarea
+                            id="description"
+                            autoFocus={false}
+                            autoComplete="off"
+                            placeholder=""
+                            className={`Textarea ${errors.description ? 'InputError' : ''}`}
+                            {...register("description")}
+
+                        />
+                        <label htmlFor="description">Business Description</label>
+                        {errors.description && <p className="ErrorMessage">{errors.description.message}</p>}
+                    </div>
+                
+
+                    <div className="InputItem">
+                        <Controller
+                            name="category"
+                            control={control}
+                            render={({ field }) => (
+                                <CategorySelect field={field} error={errors.category} />
+                            )}
+                        />
+                    </div>
+                    <button type="submit" className="Btn BtnPrimary w-full mt-2 ">Add & Continue</button>
+                </form>
+            </div>
+        </>
     );
 };
 
-export default Profile;
+export default AddBusiness;

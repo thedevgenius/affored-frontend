@@ -3,6 +3,7 @@ import { cookies } from "next/headers";
 import { Toaster } from "react-hot-toast";
 import { AuthProvider } from "@/lib/AuthContext";
 import Login from "@/components/login/Login";
+import Footer from '@/components/footer/Footer';
 import "./globals.css";
 
 const inter = Inter({
@@ -48,6 +49,7 @@ export default async function RootLayout({ children }) {
                 <AuthProvider initialUser={user}>
                     {children}
                     <Login />
+                    <Footer />
                     <Toaster position="bottom-center" />
                 </AuthProvider>
 
