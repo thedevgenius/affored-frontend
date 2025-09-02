@@ -1,31 +1,32 @@
-import './login.css';
-
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
+import { useSelector, useDispatch } from 'react-redux';
+import { RootState, AppDispatch } from '../../store/store';
+import { openLogin, closeLogin } from '@/store/slices/modalSlice';
 
 const MobileLoginModal = () => {
-    const [isMounted, setIsMounted] = useState(false);
+    const isOpen = useSelector((state: RootState) => state.modal.isLoginOpen);
+    const dispatch = useDispatch<AppDispatch>();
 
-    useEffect(() => {
-        setIsMounted(true);
-    }, []);
+    useEffect(() => { 
+        const timeoutId = setTimeout(() => { 
+            dispatch(openLogin());
+        }, 5000);
+        return () => clearTimeout(timeoutId);
+    }, [dispatch]);
 
-    if (!isMounted) return null;
+    if (!isOpen) return null;
 
     return (
-        <>
-            <div className="mobile-login-modal">
-                <div className="mobile-modal-content bg-white p-4 w-full">
-                    <div className='w-full'>
-                        <h2 className='text-center text-3xl font-semibold mb-5'>Login</h2>
-                        <form>
-                            <input type="text" className='input mb-5' placeholder="Username" />
-                            <button type="submit" className='btn w-full'>Submit</button>
-                        </form>
-                    </div>
-                </div>
-            </div>
-        </>
-    )
-}
+        <div>
+            <h2>Login</h2>
+            <form>
+                <button type='button' onClick={()=> dispatch(closeLogin())}>X</button>
+                <input type="text" placeholder="Username" />
+                <input type="password" placeholder="Password" />
+                <button type="submit">Login</button>
+            </form>
+        </div>
+    );
+};
 
 export default MobileLoginModal;
