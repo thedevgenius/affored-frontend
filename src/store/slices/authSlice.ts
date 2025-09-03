@@ -2,6 +2,7 @@ import { createSlice, createAsyncThunk, PayloadAction } from "@reduxjs/toolkit";
 import axios from "axios";
 
 interface AuthState {
+    isAuthenticated: boolean;
     phone: string;
     otpSent: boolean;
     loading: boolean;
@@ -10,6 +11,7 @@ interface AuthState {
 }
 
 const initialState: AuthState = {
+    isAuthenticated: false,
     phone: "",
     otpSent: false,
     loading: false,
@@ -47,7 +49,11 @@ const authSlice = createSlice({
     name: "auth",
     initialState,
     reducers: {
-        resetAuth: () => initialState,
+        resetAuth: () => initialState,  
+        // authenticate: (state, action: PayloadAction<string>) => {
+        //     state.isAuthenticated = true;
+        //     state.token = action.payload;
+        // }
     },
     extraReducers: (builder) => {
         builder
@@ -72,6 +78,7 @@ const authSlice = createSlice({
                 state.loading = false;
                 state.token = action.payload;
                 state.otpSent = false;
+                state.isAuthenticated = true;
             })
             .addCase(verifyOtp.rejected, (state, action: any) => {
                 state.loading = false;
