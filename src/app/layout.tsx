@@ -27,7 +27,7 @@ export default function RootLayout({
 			>
 				<Providers>
 					{children}
-					<LoginModal />
+					{/* <LoginModal /> */}
 				</Providers>
 				
 			</body>

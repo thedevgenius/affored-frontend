@@ -1,3 +1,5 @@
+'use client';
+
 import { useDispatch, useSelector } from "react-redux";
 import { RootState, AppDispatch } from "../store/store";
 import { requestOtp, verifyOtp } from "../store/slices/authSlice";
@@ -10,6 +12,10 @@ export const useLogin = () => {
         dispatch(requestOtp(phone));
     };
 
-    return { sendOtp, authState}
+    const checkOtp = (phone: string, otp: string) => {
+        dispatch(verifyOtp({ phone, otp }))
+    }
+
+    return { sendOtp, checkOtp, authState}
 }
 
