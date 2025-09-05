@@ -30,9 +30,11 @@ const Login = () => {
         e.preventDefault();
         const otp = (e.target as any).otp.value;
         dispatch(verifyOtp({ phone: authState.phone, otp }));
-        // router.push("/");
     }
 
+    if (authState.loading || authState.isAuthenticated) {
+        return <div className="loader">Loading...</div>;
+    }
 
     return (
         <div className="container mx-auto p-4">

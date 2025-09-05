@@ -3,6 +3,7 @@ import { useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { RootState, AppDispatch } from "@/store/store";
 import { useRouter } from "next/navigation";
+import Link from "next/link";
 
 export default function Home() {
 	const dispatch = useDispatch<AppDispatch>();
@@ -17,7 +18,8 @@ export default function Home() {
 
 	return (
 		<div className="container mx-auto p-4">
-			<h2>User Profile</h2>
+            <h2>User Profile</h2>
+            <Link href="/login" className="btn mt-5">Go to Login</Link>
 		</div>
 	)
 }

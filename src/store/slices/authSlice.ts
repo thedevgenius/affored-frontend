@@ -87,7 +87,7 @@ const authSlice = createSlice({
             .addCase(verifyOtp.fulfilled, (state, action: PayloadAction<string>) => {
                 state.token = action.payload;
                 state.isAuthenticated = true;
-                state.otpSent = false;
+                // state.otpSent = false;
                 state.loading = false;
                 
             })
