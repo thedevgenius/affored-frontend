@@ -1,5 +1,5 @@
 "use client";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { RootState, AppDispatch } from "@/store/store";
 import { requestOtp, verifyOtp } from "@/store/slices/authSlice";
@@ -11,9 +11,9 @@ const Login = () => {
     const dispatch = useDispatch<AppDispatch>();
     const authState = useSelector((state: RootState) => state.auth);
     const router = useRouter();
+    const [otpSent, setOtpSent] = useState(false);
     
     useEffect(() => {
-        console.log("Auth state in login:", authState);
         if (authState.isAuthenticated) {
             router.push("/");
         }
@@ -23,7 +23,7 @@ const Login = () => {
         e.preventDefault();
         const phone = (e.target as any).phone.value;
         dispatch(requestOtp(phone));
-        console.log("OTP requested for phone:", phone);
+        setOtpSent(true);
     }
 
     const handleVerifyOTP = (e: React.FormEvent) => {
@@ -38,7 +38,7 @@ const Login = () => {
 
     return (
         <div className="container mx-auto p-4">
-            {!authState.otpSent && (
+            {!otpSent && (
                 <div>
                     <h2 className="text-2xl font-semibold mb-3">Login</h2>
                     <form onSubmit={handleSendOTP}>
@@ -48,7 +48,7 @@ const Login = () => {
                 </div>
             )}
 
-            {authState.otpSent && (
+            {otpSent && (
                 <div>
                     <h2 className="text-2xl font-semibold mb-3">Enter OTP</h2>
                     <form onSubmit={handleVerifyOTP}>

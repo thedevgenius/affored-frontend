@@ -5,7 +5,6 @@ import Cookies from "js-cookie";
 interface AuthState {
     isAuthenticated: boolean;
     phone: string;
-    otpSent: boolean;
     loading: boolean;
     error: string | null;
     token: string | null;
@@ -14,7 +13,6 @@ interface AuthState {
 const initialState: AuthState = {
     isAuthenticated: false,
     phone: "",
-    otpSent: false,
     loading: false,
     error: null,
     token: null,
@@ -64,6 +62,11 @@ const authSlice = createSlice({
     initialState,
     reducers: {
         resetAuth: () => initialState,  
+        logout: (state) => {
+            state.isAuthenticated = false;
+            state.token = null;
+            Cookies.remove("accessToken");
+        }
     },
     extraReducers: (builder) => {
         builder
@@ -74,7 +77,6 @@ const authSlice = createSlice({
             .addCase(requestOtp.fulfilled, (state, action: PayloadAction<string>) => {
                 state.loading = false;
                 state.phone = action.payload;
-                state.otpSent = true;
             })
             .addCase(requestOtp.rejected, (state, action: any) => {
                 state.loading = false;
@@ -87,7 +89,6 @@ const authSlice = createSlice({
             .addCase(verifyOtp.fulfilled, (state, action: PayloadAction<string>) => {
                 state.token = action.payload;
                 state.isAuthenticated = true;
-                // state.otpSent = false;
                 state.loading = false;
                 
             })
@@ -98,5 +99,5 @@ const authSlice = createSlice({
     },
 });
 
-export const { resetAuth } = authSlice.actions;
+export const { resetAuth, logout } = authSlice.actions;
 export default authSlice.reducer;
